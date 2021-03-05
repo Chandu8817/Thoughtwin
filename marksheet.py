@@ -31,7 +31,7 @@ def info():
         
     except :
 
-        print("roll number and marks should be numric ")
+        print("roll number and marks should be numeric ")
         
     
                     
