@@ -36,9 +36,10 @@ def info():
             
 
         
-    except :
+    except:
 
         print("roll number and marks should be numeric ")
+        # print(e)
         
     
                     
@@ -156,14 +157,26 @@ def update():
             dic['maths'] = int(input('enter maths marks \n'))
             dic['physics'] = int(input('enter physics marks \n'))
             dic['chemistry'] = int(input('enter chemistry marks \n'))
+            print(dic['studname'], "is update ")
+        else:
+            print(roll_num," is not  avialable ")
+
+
 
     # display()
 
 def remove():
-    roll_num = int(input("enter roll number \n "))
-    for dic in student_list:
-        if dic['rollnum'] == roll_num:
-            student_list.remove(dic)
+    try:
+        roll_num = int(input("enter roll number \n "))
+        list_rollnum.remove(roll_num)
+        for dic in student_list:
+            if dic['rollnum'] == roll_num:
+                student_list.remove(dic)
+                print(dic['studname'], "is removed")
+    except:
+        print(roll_num," is not  avialable ")
+        
+    
 
 while True:
 

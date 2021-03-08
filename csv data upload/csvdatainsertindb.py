@@ -10,8 +10,8 @@ mydb= mysql.connector.connect(
 )
 val=[]
 
-file=input("file name")
-    # file='demodata.csv'
+# file=input("file name")
+file='data.csv'
 
 
 try:
@@ -27,8 +27,8 @@ try:
                 val.append(tableval)
                 line_count+=1
                 
-except:
-    print("file not valid")
+except Exception as e:
+    print(e)
 
 
 
