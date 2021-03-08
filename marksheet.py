@@ -3,6 +3,8 @@ dict_of_students = {'rollnum':111,'studname':'abcd','english':56,
 'hindi':45,'maths':35,
 'physics':85,'chemistry':75}
 student_list.append(dict_of_students)
+
+list_rollnum=[111]
 def info():
     
 
@@ -12,12 +14,10 @@ def info():
     # else:
     
     try:
-        dict_of_students = {}  
+        dict_of_students = {} 
         ro_input=int(input("enter roll number \n"))
-
-        if  ro_input in dict_of_students.keys():
-            print("roll num already exist  ")
-        else:
+        
+        if  ro_input not in list_rollnum:
             dict_of_students['rollnum'] = ro_input
             dict_of_students['studname'] = input("enter student name \n")
             dict_of_students['english'] = int(input('enter english marks \n'))
@@ -25,8 +25,15 @@ def info():
             dict_of_students['maths'] = int(input('enter maths marks \n'))
             dict_of_students['physics'] = int(input('enter physics marks \n'))
             dict_of_students['chemistry'] = int(input('enter chemistry marks \n'))
-            student_list.append(dict_of_students)
             print("data added successfuly")          
+
+            student_list.append(dict_of_students)
+            list_rollnum.append(ro_input)
+
+        else:
+            print("roll num already exist  ")
+
+            
 
         
     except :

@@ -17,7 +17,7 @@ mycursor=mydb.cursor()
 #   ('Peter', 'Lowstreet 4'),
 #   ('Amy', 'Apple st 652'),
 #   ('Hannah', 'Mountain 21'),
-#   ('Michael', 'Valley 345'),
+#   ('Michael', 'Valley 345'), 
 #   ('Sandy', 'Ocean blvd 2'),
 #   ('Betty', 'Green Grass 1'),
 #   ('Richard', 'Sky st 331'),
@@ -33,12 +33,12 @@ mycursor=mydb.cursor()
 # mycursor.execute(sql, val)
 
 
-mycursor.execute("SELECT name FROM customers")
+# mycursor.execute("SELECT name FROM customers")
 
-myresult = mycursor.fetchall()
+# myresult = mycursor.fetchall()
 
-for x in myresult:
-  print(x)
+# for x in myresult:
+#   print(x)
 
 # mydb.commit()
 
@@ -53,5 +53,6 @@ for x in myresult:
 # for x in mycursor:
 #     print(x)
 
+mycursor.execute("CREATE TABLE  emp_detail (name VARCHAR(255),dob DATE doj DATE,email VARCHAR(100), mobile INT(20))")
 
 
