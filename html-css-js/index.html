@@ -4,10 +4,53 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    //  $(document).ready(function(){
+    //     $('button').click(function(){
+    //         $('h1').hide()
+    //     });
+    //     $('h1').dblclick(function(){
+    //         $(this).hide()
+    //     });
+    //  });
+          
+
+    $(document).ready(function(){
+    $('input').focus(function(){
+        $(this).css("background-color","yellow");
+    });
+    $('input').blur(function(){
+
+        $(this).css("background-color",'red');
+    });
+    });
+        
+      </script>
 </head>
 <body>
-    <h1>java Script</h1>
+    <h1 >java Script</h1>
+    <h1 id="h1tag">java Script</h1>
+    <h1 id="h1tag">java Script</h1>
 
-    <p></p>
+    <input type="text" name="fullname" id="">
+
+    <button onclick="hidefun()">hide h1 tag</button>
+    <div>
+    <p id="demo"></p>
+    <button type="button" onclick="document.getElementById('demo').innerHTML='Hello World '">Try now</button>
+</div>
+<div class="bulb">
+
+    <button type="button" onclick="bulbon()">ON</button>
+    <img id="myimage" src="pic_bulbon.gif" alt="image">
+    <button type="button" onclick="bulboff()">off</button>
+
+
+</div>
+
+<script src="myscript.js">
+</script>
+
 </body>
 </html>

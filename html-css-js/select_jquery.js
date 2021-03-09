@@ -1,48 +1,121 @@
-$(document).ready(function() {
-// Initializing arrays with city names.
-var USA = [{
-display: "Washington, D.C.",value: "WashingtonDC"},
-{display: "Alaska", value: "Alaska"},
-{display: "New York",value: "New-York"},
-{display: "Florida",value: "Florida"},
-{display: "Hawaii",value: "Hawaii"},
-{display: "California",value: "California"}];
-var AUSTRALIA = [{
-display: "Canberra",value: "Canberra"},
-{display: "Sydney",value: "Sydney"},
-{display: "Melbourne",value: "Melbourne"},
-{display: "Perth",value: "Perth"},
-{display: "Gold Coast ",value: "Gold-Coast"}];
-var FRANCE = [{
-display: "Paris",value: "Paris"},
-{display: "Avignon",value: "Avignon"},
-{ display: "Strasbourg",value: "Strasbourg"},
-{display: "Nice", value: "Nice"}];
-// Function executes on change of first select option field.
-$("#country").change(function() {
-var select = $("#country option:selected").val();
-switch (select) {
-case "USA":
-city(USA);
-break;
-case "AUSTRALIA":
-city(AUSTRALIA);
-break;
-case "FRANCE":
-city(FRANCE);
-break;
-default:
-$("#city").empty();
-$("#city").append("<option>--Select--</option>");
-break;
+$(document).ready(function () {
+  var coutriesoption = " ";
+  var stateoptions = " ";
+  var cityoptions = "";
+
+  $.getJSON("countries.json", function (data) {
+    $.each(data, function (indexofcode, country) {
+      coutriesoption +=
+        '<option value = "' + country.code + '">' + country.name + "</option>";
+        
+    });
+ 
+    $("#country").html(coutriesoption);
+
+    $("#country").change(function () {
+      
+    //reset other two dropdown code starts
+    // $("#state").prop('selectedIndex',0);
+    $('#state option:first').prop('selected',true);
+    // $("#city").prop('selectedIndex',0);
+    $('#city option:first').prop('selected',true);
+
+    //reset other two dropdown code ENDS
+
+
+      if ($(this).val() == "IN") {
+        $.getJSON("IndianStates.json", function (data) {
+          $.each(data, function (statecode, state) {
+            stateoptions +=
+              "<option value = " + statecode + ">" + state + "</option>";
+          });
+          $("#state").html(stateoptions);
+        });
+      }
+
+      else if ($(this).val() == "US") {
+        $.getJSON("us_state.json", function (data) {
+          $.each(data, function (statecode, state) {
+            stateoptions +=
+              "<option value = " + statecode + ">" + state + "</option>";
+          });
+          $("#state").html(stateoptions);
+        });
+      }
+    });
+
+    $("#state").change(function () {
+      if ($(this).val() == "MP") {
+        x = "";
+
+        $.getJSON("mp.json", function (data) {
+          $.each(data, function (indexofcode, city) {
+            cityoptions +=
+              "<option value = " + city.MP + ">" + city.MP + "</option>";
+          });
+          $("#city").html(cityoptions);
+        });
+      }
+    });
+  });
+});
+
+{
+  /* <script>
+
+      $(document).ready(function () {
+
+         
+
+          $("#country").change(function () {
+
+
+
+                 
+                 var val = $(this).val();
+                
+
+                if (val == "India") {   
+                    $.getJSON('IndianStates.json',function(result){
+
+                        $.each(result,function(statecode,statename){
+                            stateoptions += "<option value='"+statecode+"'>"+statename+"</option>";
+                        });
+                   })
+                   $('#state').html(stateoptions);
+                }
+                else if (val == "England") {
+
+                  $("#state").html("<option value='Northern Ireland'>Northern Ireland</option>\
+               <option value='Scotland'>Scotland</option>\
+               <option value='Wales'>Wales</option> ");
+                }
+                else if (val == "Australia") {
+
+                    $("#state").html("<option value='New South Wales'>New South Wales</option>\
+                                    <option value='Queensland'>Queensland</option>\
+                                    <option value='South South Australia'>South Australia</option> ");
+                }
+            });
+
+            $("#state").change(function () {
+                var sval = $(this).val();
+                if (sval == "MadhyaPradesh") {
+                    $('#city').html("<option value='select-city'>select-city</option>\
+                    <option value='Indore'>Indore</option>\
+                <option value='Bhopal'>Bhopal</option>\
+                <option value='khandwa'>khandwa</option>\
+                <option value='khargone'>khargone</option> ");
+                }
+
+               else if (sval == "uttar Pradesh") {
+                    $('#city').html("<option value='select-city'>select-city</option>\
+                    <option value='kanpur'>kanpur</option>\
+                <option value='varanasi'>varanasi</option>\
+                <option value='lucknow'>lucknow</option>\
+                <option value='amethi'>amethi</option> ");
+                };
+            });
+        });
+    </script>   */
 }
-});
-// Function To List out Cities in Second Select tags
-function city(arr) {
-$("#city").empty(); //To reset cities
-$("#city").append("<option>--Select--</option>");
-$(arr).each(function(i) { //to list cities
-$("#city").append("<option value="" + arr[i].value + "">" + arr[i].display + "</option>")
-});
-}
-});

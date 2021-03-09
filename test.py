@@ -1,11 +1,13 @@
-import csv
+# import csv
 
-with open('demodata.csv', mode='r') as csv_file:
+# with open('demodata.csv', mode='r') as csv_file:
 
-    csv_read= csv.reader(csv_file)
+#     csv_read= csv.reader(csv_file)
 
-    for row in csv_read:
-        print(row)
+#     for row in csv_read:
+#         print(row)
+
+
 
 
 
@@ -69,6 +71,7 @@ with open('demodata.csv', mode='r') as csv_file:
 #             print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
 #             line_count += 1
 #     print(f'Processed {line_count} lines.')
+
 
 
 

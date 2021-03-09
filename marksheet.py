@@ -16,16 +16,27 @@ def info():
     try:
         dict_of_students = {} 
         ro_input=int(input("enter roll number \n"))
-        
+        stdname=input("enter student name \n")
+        eng=int(input('enter english marks \n'))
+        hindi= int(input('enter hindi marks \n'))
+        maths=int(input('enter maths marks \n'))
+        physics=int(input('enter physics marks \n'))
+        chemistry=int(input('enter chemistry marks \n'))
+
+       
         if  ro_input not in list_rollnum:
+
             dict_of_students['rollnum'] = ro_input
-            dict_of_students['studname'] = input("enter student name \n")
-            dict_of_students['english'] = int(input('enter english marks \n'))
-            dict_of_students['hindi'] = int(input('enter hindi marks \n'))
-            dict_of_students['maths'] = int(input('enter maths marks \n'))
-            dict_of_students['physics'] = int(input('enter physics marks \n'))
-            dict_of_students['chemistry'] = int(input('enter chemistry marks \n'))
-            print("data added successfuly")          
+            dict_of_students['studname'] = stdname
+            if eng >100 or hindi >100 or maths >100 or physics >100 or chemistry > 100:
+                print("marks not greater than 100 ")
+            else:
+                dict_of_students['english'] = eng
+                dict_of_students['hindi'] =hindi
+                dict_of_students['maths'] = maths
+                dict_of_students['physics'] = physics
+                dict_of_students['chemistry'] = chemistry
+                print("data added successfuly")          
 
             student_list.append(dict_of_students)
             list_rollnum.append(ro_input)
