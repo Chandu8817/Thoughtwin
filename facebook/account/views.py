@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponseRedirect
 from django.contrib.auth.models import User
+from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -36,8 +37,8 @@ def signUp(request):
                 # return redirect('home/')
                 login_form = UserLoginForm()
 
-                return render(request, 'account/index.html', {'user_form': user_form, 'profile_form': profile_form,
-                                                              'login_form': login_form})
+                return render(request, 'index.html', {'user_form': user_form, 'profile_form': profile_form,
+                                                            'login_form': login_form})
 
         else:
             profile_form = ProfileForm()
@@ -46,7 +47,7 @@ def signUp(request):
 
         print("error")
 
-        return render(request, 'account/index.html', {'profile_form': profile_form, 'user_form': user_form, 'login_form': login_form})
+        return render(request, 'index.html', {'profile_form': profile_form, 'user_form': user_form, 'login_form': login_form})
     except Exception as e:
         print(e)
 
@@ -74,7 +75,7 @@ def signupAndLogin(request):
             # login_form = UserLoginForm()
             user_form = ExtendedUser()
             profile_form = ProfileForm()
-            return render(request, 'account/index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
+            return render(request, 'index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
 
         # return redirect('/home')
 
@@ -83,48 +84,44 @@ def signupAndLogin(request):
         login_form = UserLoginForm()
         user_form = ExtendedUser()
         profile_form = ProfileForm()
-        return render(request, 'account/index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
+        return render(request, 'index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
 
 def logoutuser(request):
     logout(request)
-    return redirect('home/')
+    return HttpResponseRedirect(reverse("home"))
 
-@login_required(login_url='login')
+@login_required(login_url='/')
 def profile_page(request):
     profiledetial = UserProfile.objects.get(user=request.user)
-    # print(profiledetial)
-    return render(request, 'account/profile.html', {"profile": profiledetial})
+    return render(request, 'profile.html', {"profile": profiledetial})
 
 def searchUser(request):
+    if request.method=="GET":
 
-    searchname=request.GET.get('search_name')
-    user_list=User.objects.filter(first_name__startswith=searchname)
-    profiledetial = UserProfile.objects.get(user=request.user)
+        searchname=request.GET.get('search_name')
+        user_list=User.objects.filter(first_name__startswith=searchname)
+        profiledetial = UserProfile.objects.get(user=request.user)
+        # return HttpResponseRedirect(reverse('profile'))
+
     params={'user_list':user_list,"profile": profiledetial}
-    return render(request,'account/profile.html',params)
+    return render(request,'profile.html',params)
 
 @login_required(login_url='login')
 def updateprofile(request):
-    user_form = ExtendedUser(request.POST)
-    upd_profile=UserProfile.objects.get(user=request.user)
-    update_form=ProfileForm(request.POST,instance=upd_profile)
-    profiledetial = UserProfile.objects.get(user=request.user)
+    if request.method == "POST":
+        image = request.FILES.get('image')
+        profile_object = UserProfile.objects.get(user=request.user)
+        profile_object.profile_pic = image
+        profile_object.save()
+        return redirect('/profile/')
 
-
-
-    if user_form.is_valid() and update_form.is_valid():
-        user = user_form.save()
-        updprofile = update_form.save(commit=False)
-        updprofile.user = user
-        updprofile.save()
-        params={'upd_profile':update_form,"profile": profiledetial}
-        return redirect('profle/')    
-    else:
-        params={'upd_profile':update_form,"profile": profiledetial}
-    return render(request,'account/profile.html',params)
-
-
-
+def updateprofilecover(request):
+    if request.method == "POST":
+        coverimage = request.FILES.get('coverimage')
+        profile_object = UserProfile.objects.get(user=request.user)
+        profile_object.profile_cover = coverimage
+        profile_object.save()
+        return redirect('/profile/')
 
 
 

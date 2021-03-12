@@ -10,6 +10,29 @@
 
 
 
+def updateprofilepic(request):
+    context={}
+    profiledetial = UserPorfilePic.objects.get(user=request.user)
+
+    user_form = ExtendedUser(request.POST)
+    upd_profile=UserPorfilePic.objects.get(user=request.user)
+    update_form=ProfilePicForm(request.POST,request.FILES , instance=upd_profile)
+    
+    if update_form.is_valid():
+        user=user_form.save()
+        updprofile = update_form.save(commit=False)
+        updprofile.user = user
+        updprofile.save()
+
+
+
+        # update_form.save() 
+        return HttpResponseRedirect(reverse('home'))
+    
+    context['update_form']=updprofile
+    
+    return render(request,'account/result.html',context)
+
 
 
 

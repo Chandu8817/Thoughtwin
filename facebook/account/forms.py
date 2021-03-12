@@ -71,7 +71,7 @@ class ProfileForm(forms.ModelForm):
             'class': 'inputbody in2',
             'id': 'username_id'}))
 
-    profile_pic=forms.ImageField()
+    # profile_pic=forms.ImageField(required=False)
 
     class Meta:
         model = UserProfile
