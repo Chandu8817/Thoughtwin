@@ -4,9 +4,11 @@ urlpatterns =[
     path('create',views.createView,name='createpost'),
     path('',views.retrieveView,name='postlist'),
     path('<int:id>/',views.detailView,name='detailpost'),
-    path('update/<int:id>/',views.updateView,name='detailpost'),
+    path('update/<int:id>/',views.updateView,name='update'),
     path('delete/<int:id>/',views.deleteView,name='delete'),
-    path('comments/',views.likesnComments,name='comments'),
+    path('comments/',views.Comment,name='comments'),
+    path('reply/',views.reply,name='reply'),
+
 
 
 

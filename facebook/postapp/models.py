@@ -15,7 +15,12 @@ class UserPost(models.Model):
     def __str__(self):
         return self.postcontain 
 
-class LikesnComments(models.Model):
-    userpost=models.ManyToManyField(UserPost,null=True,blank=True)
-    comments=models.TextField(max_length=200,blank=True,null=True)
-    likes=models.IntegerField(default=0,blank=True,null=True)
+class PostComment(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    userpost=models.ForeignKey(UserPost,on_delete=models.CASCADE,null=True, blank=True)
+    comment=models.TextField(max_length=200,blank=True,null=True)
+    commentreply=models.ForeignKey("self",on_delete=models.CASCADE,null=True,blank=True,related_name="replies")
+    commentdate=models.DateTimeField(auto_now_add=True,null=True)
+
+    def __str__(self):
+        return str(self.comment)

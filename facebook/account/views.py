@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
+from postapp.models import UserPost
 from django.contrib import messages
 from .forms import ProfileForm, ExtendedUser, UserLoginForm
 
@@ -93,7 +94,10 @@ def logoutuser(request):
 @login_required(login_url='/')
 def profile_page(request):
     profiledetial = UserProfile.objects.get(user=request.user)
-    return render(request, 'profile.html', {"profile": profiledetial})
+     
+
+    userpost_list=UserPost.objects.all()
+    return render(request, 'profile.html', {"profile": profiledetial,'userpost_list':userpost_list})
 
 def searchUser(request):
     if request.method=="GET":

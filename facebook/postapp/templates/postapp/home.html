@@ -17,33 +17,67 @@
 </head>
 
 <body>
-  <!-- nav -->
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="index.html">FaceClone</a>
-      </div>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="home.html">Home</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="#">Logout</a></li>
-      </ul>
+  <header>
+    <div class="tb">
+        <div class="td" id="logo">
+            <a href="#"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="td" id="search-form">
+            <form method="GET" action="{% url 'search' %}">
+                <!-- {% csrf_token %} -->
+                <input type="text" placeholder="Search Facebook" name="search_name">
+                <button type="submit"><i class="material-icons">search</i></button>
+            </form>
+        </div>
+
+        {% if user_list %}
+        {% for user in user_list %}
+
+        <div class="card" style="width: 18rem;">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body">
+                <h5 class="card-title">{{ user.first_name }}</h5>
+                <a href="#" class="btn btn-primary">Add Friend</a>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+
+
+
+
+        <div class="td" id="f-name-l"><span>{{profile.user.username}}</span>
+            <button class="btn btn-info" type="button"><a
+                    href="{% url 'logout' %}">logout</a></button>
+        </div>
+        <div class="td" id="i-links">
+            <div class="tb">
+                <div class="td" id="m-td">
+                    <div class="tb">
+                        <span class="td"><i class="material-icons">person_add</i></span>
+                        <span class="td"><i class="material-icons">chat_bubble</i></span>
+                        <span class="td m-active"><i class="material-icons">notifications</i></span>
+                    </div>
+                </div>
+                <div class="td">
+                    <a href="#" id="p-link">
+                        {% if profile %}
+                        <img src="{{ profile.profile_pic.url }}">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
-  <!-- ./nav -->
+</header>
+  <br>
 
   <!-- main -->
   <main class="container">
     <div class="row">
       <div class="col-md-3">
-        <!-- profile brief -->
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <h4>nicholaskajoh</h4>
-            <p>I love to code!</p>
-          </div>
-        </div>
-        <!-- ./profile brief -->
+       
 
         <!-- friend requests -->
         <div class="panel panel-default">
@@ -133,12 +167,33 @@
             </div>
           </div>
           <div class="row post-body">
-            <div class="col-sm-12">
+            <div class="col-sm-12"><a href="{% url 'detailpost' post.id %}">
               {{ post.postcontain }}
               <img src="{{ post.postimage.url }}" width="50" height="500" style="padding: 10px; position: relative;">
             </div>
+          </a>
           </div>
         </div>
+        {% for comment in comment %}
+                <div class="d-flex flex-row user p-2"><img class="rounded-circle" src="{{ profiledetial.profile_pic.url }}" width="50">
+                    <div class="d-flex flex-column ml-2"><span class="name font-weight-bold">{{comment.user.username}}</span><span>{{comment.commentdate}}</span></div>
+                </div>
+
+                <div class="mt-2 p-2">
+                    <p class="comment-content">{{ comment.comment}}</p>
+                {% endfor %}
+       
+
+        <div class="p-acts">
+          <form method="GET" action="{% url 'comments'%}" >
+              {% csrf_token %}
+             
+              <input type="text" placeholder="reply comment" name="comment">
+              <input type="hidden"  name="postid" value="{{ singlepost.id}}">
+              <button type="submit"> Reply</button>
+          </form>
+   
+  </div>
         {% endfor %}
 
         <!--  -->

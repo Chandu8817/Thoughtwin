@@ -4,9 +4,12 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib import messages
+from django.views.generic import View
+
+
 # Create your views here.
 from .forms import PostForm
-from .models import UserPost,LikesnComments
+from .models import UserPost,PostComment
 
 from account.models import UserProfile
 from django.contrib.auth.models import User
@@ -36,21 +39,38 @@ def createView(request):
 def retrieveView(request):
 
     context={}
-    profiledetial = UserProfile.objects.get(user=request.user)
 
+    profiledetial = UserProfile.objects.get(user=request.user)
+   
     userpost_list=UserPost.objects.all()
     post_form=PostForm()
     context['post_form']=post_form
     context['postlist']=userpost_list
     context['profiledetial']=profiledetial
 
+
+
     return render(request,'postapp/home.html',context)
 
 def detailView(request,id):
 
     context={}
+    profiledetial = UserProfile.objects.get(user=request.user)
+
+    obj=get_object_or_404(UserPost,id=id)
+    usercomment=PostComment.objects.filter(userpost=obj,commentreply=None)
+    count=usercomment.count
+
+
     singlepost=UserPost.objects.get(id=id)
     context['singlepost']=singlepost
+    context['comment']=usercomment
+    context['profiledetial']=profiledetial
+    context['count']=count
+
+
+
+
     return render(request,'postapp/detailpost.html',context)
 
 def updateView(request,id):
@@ -75,14 +95,37 @@ def deleteView(request,id):
 
     return render(request,"postapp/delete.html")
 
-def likesnComments(request,id):
-    # context={}
+def Comment(request):
+    # import pdb; pdb.set_trace()
 
-    comments=request.GET.get("comment")
+    post_id=request.GET.get("postid")
+    comment=request.GET.get("comment")
 
-    likes_comments=LikesnComments.objects.create(comments=comments)
-    likes_comments.save()
-    return render(request,'postapp/home.html')
+    post_obj=UserPost.objects.get(id=post_id)
+    user=request.user
+    PostComment.objects.create(user=user,userpost=post_obj,comment=comment)
+
+    return HttpResponseRedirect(reverse("profile"))
+
+def reply(request):
+
+    comment=request.GET.get("comment")
+    comment_id=request.GET.get("commentid")
+    comment_obj=PostComment.objects.get(id=comment_id)
+    post_id=request.GET.get("postid")
+    post_obj=UserPost.objects.get(id=post_id)
+    user=request.user
+    commentreply=PostComment(user=user,userpost=post_obj,comment=comment,commentreply=comment_obj)
+    commentreply.save()
+
+
+    return HttpResponseRedirect(reverse("profile"))
+
+
+
+
+    
+    
 
 
 

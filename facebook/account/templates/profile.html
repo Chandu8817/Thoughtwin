@@ -39,11 +39,7 @@
 
 
     <main>
-        <div id="device-bar-1">
-            <button></button>
-            <button></button>
-            <button></button>
-        </div>
+        
         <header>
             <div class="tb">
                 <div class="td" id="logo">
@@ -261,7 +257,7 @@
                         <div id="c-c-main">
                             <div class="tb">
                                 <div class="td" id="p-c-i"><img
-                                        src="https://imagizer.imageshack.com/img921/3072/rqkhIb.jpg" alt="Profile pic">
+                                        src="{{ profile.profile_pic.url  }}" alt="Profile pic">
                                 </div>
                                 <div class="td" id="c-inp">
                                     <input type="text" placeholder="What's on your mind?">
@@ -272,34 +268,45 @@
                     </div>
                     <div>
                         <div class="post">
+
+                            {% for posts in userpost_list %}
                             <div class="tb">
-                                <a href="#" class="td p-p-pic"><img
-                                        src="https://imagizer.imageshack.com/img923/2452/zifFKH.jpg"
+                                <a href="{% url 'profile' %}" class="td p-p-pic"><img
+                                        src="{{profile.profile_pic.url }}"
                                         alt="Rajeev's profile pic"></a>
                                 <div class="td p-r-hdr">
                                     <div class="p-u-info">
-                                        <a href="#">Rajeev Singh</a> shared a memory with <a href="#">Himalaya Singh</a>
+                                        <a href="#">{{posts.user.username}}</a> shared a memory with <a href="#">Himalaya Singh</a>
                                     </div>
                                     <div class="p-dt">
                                         <i class="material-icons">calendar_today</i>
-                                        <span>January 28, 2015</span>
+                                        <span>{{ post.dateofpost }}</span>
                                     </div>
                                 </div>
                                 <div class="td p-opt"><i class="material-icons">keyboard_arrow_down</i></div>
                             </div>
                             <a href="#" class="p-cnt-v">
-                                <img src="https://imagizer.imageshack.com/img923/8568/6LwtUa.jpg">
+                                <img src="{{ posts.postimage.url }}" width="100px" height="500px" style="padding-left: 100px; padding-right: 100px;">
                             </a>
+                            {{posts.id}}
                             <div>
+                            
                                 <div class="p-acts">
-                                    <div class="p-act like"><i class="material-icons">thumb_up_alt</i><span>25</span>
-                                    </div>
-                                    <div class="p-act comment"><i class="material-icons">comment</i><span>1</span></div>
-                                    <div class="p-act share"><i class="material-icons">reply</i></div>
-                                </div>
+                                    <form method="GET" action="{% url 'comments'}" >
+                                        {% csrf_token %}
+                                       
+                                        <input type="text" placeholder="reply comment" name="comment">
+                                        <input type="hidden"  name="postid" value="{{ posts.id}}">
+                                        <button type="submit"> Reply</button>
+                                    </form>
+                             
                             </div>
+                            {% endfor %}
+                           
                         </div>
+                        
                     </div>
+                    
                     <div id="loading"><i class="material-icons">autorenew</i></div>
                 </div>
                 <div class="td" id="r-col">
