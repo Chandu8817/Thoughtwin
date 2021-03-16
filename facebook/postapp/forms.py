@@ -1,9 +1,9 @@
 from  django import  forms
-from  .models import UserPost,PostComment
+from  .models import Post,Comment
 
 # class PostForm(forms.Form):
 class PostForm(forms.ModelForm):
-    postcontain=forms.CharField(widget=forms.Textarea(
+    contain=forms.CharField(widget=forms.Textarea(
         attrs={
 
         'class': 'post_catain2',
@@ -13,9 +13,9 @@ class PostForm(forms.ModelForm):
         'id': 'post_catain'}))
 
     class Meta:
-        model = UserPost
+        model = Post
 
-        fields=('postcontain','postimage')
+        fields=('contain','image')
         # exclude = ('user',)
 
 # class LikesnCommentsForm(forms.ModelForm):

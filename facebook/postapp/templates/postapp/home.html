@@ -7,12 +7,10 @@
 
   <!-- <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"> -->
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/postlist.css' %}">
 
 
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style1.css' %}">
 
 </head>
 
@@ -117,10 +115,10 @@
 
                   <ul class="list-inline" id='list_PostActions'>
                     <li class='active'><a href='#'>Update status</a></li>
-                    <li>{{post_form.postimage}}</li>
+                    <li>{{post_form.image}}</li>
 
                   </ul>
-                  {{post_form.postcontain}}
+                  {{post_form.contain}}
 
 
               </div>
@@ -145,56 +143,11 @@
 
         <!-- feed -->
 
-
-        {% for post in postlist %}
-
-
-        <div class="post col-sm-12" id="post_2" style="border-radius: 5px;">
-          <div class="row post-heading">
-            <div class="col-sm-12">
-              <a href="{% url 'profile' %}">
-                <img src="{{profiledetial.profile_pic.url}}" width="50" height="50" style="border-radius: 10px;"
-                  class="profile-picture pull-left" />
-                &nbsp;
-               
-                <span class="post-user-name">{{post.user.first_name}}</span><br />
-                &nbsp;
-                &nbsp;
-
-              </a>
-
-              <small class="post-date text-mute">{{post.dateofpost}}</small>
-            </div>
-          </div>
-          <div class="row post-body">
-            <div class="col-sm-12"><a href="{% url 'detailpost' post.id %}">
-              {{ post.postcontain }}
-              <img src="{{ post.postimage.url }}" width="50" height="500" style="padding: 10px; position: relative;">
-            </div>
-          </a>
-          </div>
-        </div>
-        {% for comment in comment %}
-                <div class="d-flex flex-row user p-2"><img class="rounded-circle" src="{{ profiledetial.profile_pic.url }}" width="50">
-                    <div class="d-flex flex-column ml-2"><span class="name font-weight-bold">{{comment.user.username}}</span><span>{{comment.commentdate}}</span></div>
-                </div>
-
-                <div class="mt-2 p-2">
-                    <p class="comment-content">{{ comment.comment}}</p>
-                {% endfor %}
        
 
-        <div class="p-acts">
-          <form method="GET" action="{% url 'comments'%}" >
-              {% csrf_token %}
-             
-              <input type="text" placeholder="reply comment" name="comment">
-              <input type="hidden"  name="postid" value="{{ singlepost.id}}">
-              <button type="submit"> Reply</button>
-          </form>
-   
-  </div>
-        {% endfor %}
+
+
+
 
         <!--  -->
       </div>
@@ -231,16 +184,77 @@
     </div>
     </div>
   </main>
+
+
+
+
+
   <!-- ./main -->
 
-  <!-- footer -->
-  <footer class="container text-center">
-    <ul class="nav nav-pills pull-right">
-      <li>FaceClone - Made by [your name here]</li>
-    </ul>
-  </footer>
-  <!-- ./footer -->
-  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+
+
+
+
+
+  {% for post in postlist %}
+
+  <div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="d-flex justify-content-between p-2 px-3">
+                    <div class="d-flex flex-row align-items-center"> <img src="{{profiledetial.profile_pic.url}}" width="50" class="rounded-circle">
+                        <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{post.user.first_name}}</span> <small class="text-primary">Collegues</small> </div>
+                    </div>
+                    <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">{{post.date}}</small> <i class="fa fa-ellipsis-h"></i> </div>
+                </div> <img src="{{post.image.url }}" class="img-fluid">
+                <div class="p-2">
+                    <p class="text-justify">{{post.contain}}</p>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i class="fa fa-smile-o ml-2"></i> </div>
+                        <div class="d-flex flex-row muted-color"> <span>{count}</span> <span class="ml-2">
+                          {% if user.is_authenticated %}
+                          <form method="POST" action="{% url 'delete' post.id %}" >
+
+                          {% csrf_token %}
+                          <input type="submit" value="Delete ">
+                          
+                  
+                      </form> 
+                      {% endif %}
+                    </span> </div>
+                    </div>
+                    <hr>
+                    <div class="comments">
+                        <div class="d-flex flex-row mb-2"> <img src="https://i.imgur.com/9AZ2QX1.jpg" width="40" class="rounded-image">
+                            <div class="d-flex flex-column ml-2"> <span class="name">Daniel Frozer</span> <small class="comment-text">I like this alot! thanks alot</small>
+                                <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>Reply</small> <small>Translate</small> <small>18 mins</small> </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row mb-2"> <img src="https://i.imgur.com/1YrCKa1.jpg" width="40" class="rounded-image">
+                            <div class="d-flex flex-column ml-2"> <span class="name">Elizabeth goodmen</span> <small class="comment-text">Thanks for sharing!</small>
+                                <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>Reply</small> <small>Translate</small> <small>8 mins</small> </div>
+                            </div>
+                        </div>
+                        <div class="comment-input"> <input type="text" class="form-control">
+                            <div class="fonts"> <i class="fa fa-camera"></i> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endfor%}
+
+
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
   <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 
 </body>

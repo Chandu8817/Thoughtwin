@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
-from postapp.models import UserPost
+from postapp.models import Post
+from postapp.forms import PostForm
 from django.contrib import messages
 from .forms import ProfileForm, ExtendedUser, UserLoginForm
 
@@ -46,8 +47,6 @@ def signUp(request):
             user_form = ExtendedUser()
             login_form = UserLoginForm()
 
-        print("error")
-
         return render(request, 'index.html', {'profile_form': profile_form, 'user_form': user_form, 'login_form': login_form})
     except Exception as e:
         print(e)
@@ -61,7 +60,6 @@ def signupAndLogin(request):
         if login_form.is_valid():
             username = login_form.cleaned_data.get('username')
             password = login_form.cleaned_data.get('password')
-            print(username, password)
 
             user = authenticate(username=username, password=password)
 
@@ -74,9 +72,9 @@ def signupAndLogin(request):
         else:
             print("user not found")
             # login_form = UserLoginForm()
-            user_form = ExtendedUser()
-            profile_form = ProfileForm()
-            return render(request, 'index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
+        user_form = ExtendedUser()
+        profile_form = ProfileForm()
+        return render(request, 'index.html', {'login_form': login_form, 'user_form': user_form, 'profile_form': profile_form})
 
         # return redirect('/home')
 
@@ -95,9 +93,11 @@ def logoutuser(request):
 def profile_page(request):
     profiledetial = UserProfile.objects.get(user=request.user)
      
-
-    userpost_list=UserPost.objects.all()
-    return render(request, 'profile.html', {"profile": profiledetial,'userpost_list':userpost_list})
+    post_form=PostForm()
+    
+    post_list=Post.objects.all()
+    return render(request, 'profile.html', {"profile": profiledetial,
+    'post_list':post_list,"post_form":post_form})
 
 def searchUser(request):
     if request.method=="GET":
