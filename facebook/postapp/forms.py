@@ -6,7 +6,7 @@ class PostForm(forms.ModelForm):
     contain=forms.CharField(widget=forms.Textarea(
         attrs={
 
-        'class': 'post_catain2',
+        'class': 'form-control',
         'placeholder': ' Whats on your Mind   ! ',
         'rows':"5",
         'max-width':'240',

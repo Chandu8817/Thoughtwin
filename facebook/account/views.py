@@ -95,9 +95,9 @@ def profile_page(request):
      
     post_form=PostForm()
     
-    post_list=Post.objects.all()
+    postlist=Post.objects.all()
     return render(request, 'profile.html', {"profile": profiledetial,
-    'post_list':post_list,"post_form":post_form})
+    'postlist':postlist,"post_form":post_form})
 
 def searchUser(request):
     if request.method=="GET":

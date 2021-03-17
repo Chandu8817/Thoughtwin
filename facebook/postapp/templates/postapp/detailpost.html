@@ -8,96 +8,132 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'css/detial.css'%}">
+    <link rel="stylesheet" href="{% static 'css/detail.css'%}">
     <title>POST DETAIL</title>
   </head>
   <body>
     <div class="container">
       
- 
+    
 
-      <div class="row"><div class="col">
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="{{ singlepost.image.url }}" alt="Card image cap">
-      <div class="card-body">
-        <p class="card-text">{{ singlepost.contain}} | <i><span>{{ singlepost.date }}</span></i></p>
+      <div class="container mt-5 mb-5">
+        <div class="row d-flex align-items-center justify-content-center">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="d-flex justify-content-between p-2 px-3">
+                <a href="{% url 'profile' %}">
+                  <div class="d-flex flex-row align-items-center"> <img src="{{profiledetial.profile_pic.url}}" width="50"
+                      class="rounded-circle">
+                    <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{singlepost.user.first_name}}</span>
+                      <small class="text-primary">Collegues</small>
+                    </div>
+                  </div>
+                </a>
+                <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">{{singlepost.date}}</small> <i
+                    class="fa fa-ellipsis-h"></i> </div>
+              </div> <img src="{{singlepost.image.url }}" class="img-fluid">
+              <div class="p-2">
+                <a class="text-dark" href="{% url 'detailpost' singlepost.id %}">
+                  <p class="text-justify">{{singlepost.contain}}</p>
+                </a>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i
+                      class="fa fa-smile-o ml-2"></i> </div>
+                  <div class="d-flex flex-row muted-color"> <span></span> <span class="ml-2">
+                      {% if request.user.is_authenticated %}
+                      <form method="POST" action="{% url 'delete' singlepost.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete ">
+                      </form>
+                      {% else %}
+                      <p>hi</p>
+                      {% endif %}
+                    </span> </div>
+                </div>
+                <hr>
+    
+                <div class="comments">
+                  {% for comment in comment %}
+    
+                  <div class="d-flex flex-row mb-2"> <img src="{{ comment.profile.profile_pic.url }}" width="40" class="rounded-image">
+                    <div class="d-flex flex-column ml-2"> <span class="name">{{comment.profile.usr.username }}</span>
+                      <small class="comment-text">{{ comment }}</small>
+                      <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>
+                        <a  data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false" aria-controls="collapseExample">
+                         Reply 
+                        </a>
+                      </small>
+                        <small><a  data-toggle="collapse" href="#collapsereplies" role="button" aria-expanded="false" aria-controls="collapseExample">
+                          see comment replies 
+                         </a></small> <small>18 mins</small>
+                      </div>
+                    </div>
+                  </div>
+    
+    
+                  <!-- for rendering replies -->
+                  <div class="collapse" id="collapsereplies">
+                  {% for reply in comment.replies.all %}
+    
+                  <div class="d-flex flex-row mb-2"> <img src="{{ comment.profile.profile_pic.url }}" width="40" class="rounded-image">
+                    <div class="d-flex flex-column ml-2"> <span class="name">{{reply.profile.usr.username }}</span>
+                      <small class="comment-text">{{ reply }}</small>
+                      <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>
+                        <a  data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false" aria-controls="collapseExample">
+                         Reply 
+                        </a>
+                      </small>
+                        <small><a  data-toggle="collapse" href="#collapsereplies" role="button" aria-expanded="false" aria-controls="collapseExample">
+                          see comment replies 
+                         </a></small> <small>18 mins</small>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+    
+                
+                <!-- for reply on comment -->
+    
+                  <div class="collapse" id="collapsereply">
+                    <div class="card card-body">
+                      <form method="GET" action="{% url 'reply' %}">
+                        {% csrf_token %}          
+                        <input class="form-control" type="text" placeholder="reply comment" name="comment" required>
+                        <input type="hidden"  name="postid" value="{{ singlepost.id}}">                    
+                        <input type="hidden"  name="commentid" value="{{comment.id}}">        
+                        <button class="btn btn-outline btn-small" type="submit"> Reply</button>
+                        </form>
+                    </div>
+                  </div>
+    
+                  
+                  {% endfor %}
+    
+    
+      
+                  <div class="comment-input"> <form method="GET" action="{% url 'comments' %}">
+                    {% csrf_token %}     
+                    <input class="form-control" type="text" placeholder="reply comment" name="comment" required >
+                    <input type="hidden"  name="postid" value="{{ singlepost.id}}">
+                    <input type="hidden"  name="commentid" value="">           
+                    <button type="submit" class="form-control btn btn-outline-primary"> comment</button>
+                    </form>
+                    <div class="fonts"> <i class="fa fa-camera"></i> </div>
+                  </div>            
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <p>
-      <a  data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-       Comment 
-      </a>
       
     
-    </p>
-    <div class="collapse" id="collapseExample">
-      <div class="card card-body">
-        <form method="GET" action="{% url 'comments' %}">
-          {% csrf_token %}
-
-          <input type="text" placeholder="reply comment" name="comment">
-          <input type="hidden"  name="postid" value="{{ singlepost.id}}">
-          <input type="hidden"  name="commentid" value="">
-
-
-          <button type="submit"> comment</button>
-          </form>
-      </div>
-    </div>
-    <!-- comment form end here -->
-
-    <div class="container justify-content-center mt-5 border-left border-right">
-      <div class="d-flex justify-content-center py-2">
-        {% for comment in comment.all %}
-
-          <div class="second py-2 px-2"> <span class="text1">{{ comment.comment }} <br> <i>{{comment.date}}</i></span>
-              <div class="d-flex justify-content-between py-1 pt-2">
-              
-                  <div><img src="{{ comment.profile.profile_pic.url }}" width="18"><span class="text2">{{comment.profile.user.username}}</span></div>
-                  <div><p>
-                    <a  data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false" aria-controls="collapseExample">
-                     Reply 
-                    </a>
-                  </p><span class="text4">{{count }}</span></div>
-                  <ul>
-
-                   
-              </div>
-              {% for reply in comment.replies.all %}
-              <li>
-                <div> <img src="{{ reply.profile.profile_pic.url }}" alt="" width="18"> {{reply.profile.user.username}} :
-                </div>
-                  {{ reply }}
-              </li>
-          {% endfor %}
-        <ul>
-              
-              <div class="collapse" id="collapsereply">
-                <div class="card card-body">
-                  <form method="GET" action="{% url 'reply' %}">
-                    {% csrf_token %}          
-                    <input type="text" placeholder="reply comment" name="comment">
-                    <input type="hidden"  name="postid" value="{{ singlepost.id}}">                    
-                    <input type="hidden"  name="commentid" value="{{comment.id}}">        
-                    <button type="submit"> Reply</button>
-                    </form>
-                </div>
-              </div>
-          </div> 
-          
-      </div>
-    
-    </div>
-      {% endfor %}
- 
-  
-  </div>
-
 
   </div>
-</div>
-  </div>
+
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

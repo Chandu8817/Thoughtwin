@@ -126,12 +126,12 @@
                                         style="width: 150px; height: 20px; background-color: aqua; border-radius: 5px;">
                                         select cover image </div>
                                 </label>
-                                <input id="fileinput" type="file" class="" name="coverimage">
+                                <input id="fileinput" type="file" class="" name="coverimage" required>
 
-                                <input type="submit" value="submit" disabled />
+                                <!-- <button  type="submit">upload</button> -->
 
 
-                                <!-- <button type="submit" disabled class="btn btn-outline-primary" id="inputsubmit" >updatecover</button> -->
+                                <button type="submit"  class="btn btn-outline-primary" id="inputsubmit" >updatecover</button>
 
                             </div>
                             <br><br>
@@ -168,7 +168,7 @@
                             <form method="POST" enctype="multipart/form-data" action="{% url 'update' %}">
 
                                 {% csrf_token %}
-                                <input id="id_image" type="file" class="" name="image">
+                                <input id="id_image" type="file" class="" name="image" required>
                                 <br><br><br><br>
                                 <button type="submit" class="btn btn-outline-primary">Upload Pic</button>
 
@@ -238,7 +238,7 @@
                                     <div class="td active"><i class="material-icons">av_timer</i><span>TIMELINE</span>
                                     </div>
                                     <div class="td"><i class="material-icons">people</i><span>FRIENDS</span></div>
-                                    <div class="td"><i class="material-icons">photo</i><span>PHOTOS</span></div>
+                                    <div class="td"><i class="material-icons">NEW FEEDS</i><span><a href="{% url 'postlist'%}">POST</a></span></div>
                                     <div class="td"><i class="material-icons">explore</i><span>ABOUT</span></div>
                                     <div class="td"><i class="material-icons">archive</i><span>ARCHIVE</span></div>
                                 </div>
@@ -295,7 +295,7 @@
                     <div>
                         <div class="post">
 
-                            {% for post in post_list %}
+                            {% for post in postlist %}
                             <div class="tb">
                                 <a href="{% url 'profile' %}" class="td p-p-pic"><img src="{{profile.profile_pic.url }}"
                                         alt="Rajeev's profile pic"></a>
