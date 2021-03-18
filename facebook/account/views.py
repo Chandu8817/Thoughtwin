@@ -51,7 +51,10 @@ def signUp(request):
     except Exception as e:
         print(e)
 
+
 def signupAndLogin(request):
+
+
     if request.method == 'POST':
         login_form = UserLoginForm(request, request.POST)
         # user_form = ExtendedUser(request.POST)
