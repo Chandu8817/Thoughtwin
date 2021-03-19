@@ -1,21 +1,22 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from datetime import datetime
-from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.contrib import messages
-from django.views.generic import View,UpdateView
-from .forms import PostForm
-from .models import Post, Comment
-from account.models import UserProfile
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate, logout
+from django.views.generic import View, UpdateView, ListView, DetailView
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+
+from .forms import PostForm
+from .models import Post, Comment,Likes
+from account.models import UserProfile
 
 
-
+@method_decorator(login_required, name='dispatch')
 class CreateView(View):
     context = {}
     template = 'postapp/createpost.html'
-
     def post(self, request):
         post_form = PostForm(request.POST, request.FILES)
         if post_form.is_valid():
@@ -29,14 +30,13 @@ class CreateView(View):
         return render(request, self.template, self.context)
 
 
-class RetrieveView(View):
-    def get(self ,request):
+@method_decorator(login_required, name='dispatch')
+class RetrieveView(ListView):
+    def get(self, request):
         context = {}
-        # obj=get_object_or_404(Post,id=id)
         profiledetial = UserProfile.objects.get(user=request.user)
         usercomment = Comment.objects.filter(reply=None)
         count = usercomment.count
-
         post_list = Post.objects.all()
         post_form = PostForm()
         context['post_form'] = post_form
@@ -44,12 +44,12 @@ class RetrieveView(View):
         context['profiledetial'] = profiledetial
         context['comment'] = usercomment
         context['count'] = count
-
         return render(request, 'postapp/home.html', context)
 
-class DetailView(View):
 
-    def get(self,request,id):
+@method_decorator(login_required, name='dispatch')
+class PostDetailView(DetailView):
+    def get(self, request, id):
         context = {}
         profiledetial = UserProfile.objects.get(user=request.user)
         obj = get_object_or_404(Post, id=id)
@@ -59,106 +59,113 @@ class DetailView(View):
         context['singlepost'] = singlepost
         context['comment'] = usercomment
         context['profiledetial'] = profiledetial
-        context['count'] = count
-
+        context['count'] = count 
         return render(request, 'postapp/detailpost.html', context)
-
-
-# class UpdateView(View):
-
+    
 
 
 
 
+@method_decorator(login_required, name='dispatch')
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = 'postapp/updatepost.html'
+    context_object_name = 'update_form'
+    fields = ('contain', 'image',)
+    success_url = '/post/'
 
-class DeleteView(View):
 
-    def post(self,request, id):
+@method_decorator(login_required, name='dispatch')
+class PostDeleteView(View):
+    def post(self, request, id):
         obj = Post.objects.get(id=id)
-
         user = UserProfile.objects.get(user=request.user)
-
         if request.method == "POST":
             if obj.user != user.user:
-                # import pdb; pdb.set_trace()
                 print("user not valid")
             else:
                 obj.delete()
         return HttpResponseRedirect(reverse('postlist'))
 
 
-
+@method_decorator(login_required, name='dispatch')
 class CommentView(View):
-
-    def get(self,request):
+    def get(self, request):
         try:
-            # import pdb; pdb.set_trace()
-
             post_id = request.GET.get("postid")
             comment = request.GET.get("comment")
             post_obj = Post.objects.get(id=post_id)
             profiledetial = UserProfile.objects.get(user=request.user)
-
-            Comment.objects.create(profile=profiledetial,post=post_obj, comment=comment)
-
+            Comment.objects.create(profile=profiledetial,
+                                   post=post_obj, comment=comment)
         except Exception as e:
             print(e)
-
         return HttpResponseRedirect("/post/"+str(post_id))
 
 
+@method_decorator(login_required, name='dispatch')
 class ReplyView(View):
-
     def get(self, request):
         try:
-            # import pdb; pdb.set_trace()
             comment = request.GET.get("comment")
             comment_id = request.GET.get("commentid")
             comment_obj = Comment.objects.get(id=comment_id)
             post_id = request.GET.get("postid")
             post_obj = Post.objects.get(id=post_id)
-
             profiledetial = UserProfile.objects.get(user=request.user)
-            Comment.objects.create(
-                profile=profiledetial, post=post_obj, comment=comment, reply=comment_obj)
-
+            Comment.objects.create(profile=profiledetial, post=post_obj,
+                                   comment=comment, reply=comment_obj)
             return HttpResponseRedirect("/post/"+str(post_id))
         except Exception as e:
             print(e)
             print("profile not found ")
 
+def postLike(request,id):
 
-# def updatePostView(request,id):
-#     context = {}
-#     obj = get_object_or_404(Post, id=id)
-#     update_form = PostForm(request.POST, request.FILES, instance=obj)
+    post_id=request.POST.get('post_id')
+    user=request.user
 
-#     if update_form.is_valid():
-#         update_form.save()
-#         return HttpResponseRedirect(reverse('postlist'))
+    post=get_object_or_404(Post, id=post_id)
 
+    if user in post.liked.all():
+        post.liked.remove(user)
+    else:
+        post.liked.add(user)
 
+        likes,created=Likes.objects.get_or_create(user=user,id=post_id)
 
-#     context['update_form'] = update_form
-#     return render(request, "postapp/updatepost.html", context)
-
-
-class PostUpdateView(UpdateView):
-    model = Post
-    template_name = 'postapp/updatepost.html'
-    context_object_name = 'update_form'
-    fields = ('contain', 'image',)
-
-    def get_success_url(self):
-
-        return redirect('postlist', kwargs={'pk': self.object.id})
+        if not created:
+            if likes.value=='like':
+                likes.value='unlike'
+            else:
+                likes.value='like'
+        likes.save()
 
 
-    
-    
-        
+    return HttpResponseRedirect(reverse('detailpost',args=[str(id)] ))
 
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # @login_required(login_url='/')
 
@@ -249,7 +256,3 @@ class PostUpdateView(UpdateView):
 #         else:
 #             obj.delete()
 #     return HttpResponseRedirect(reverse('postlist'))
-
-
-
-# @login_required(login_url='/')

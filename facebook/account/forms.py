@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 gender_choices = (
     ('m', 'male'),
     ('fm', 'female'),
-    ('o', 'other')
+    ('o', 'other'),
 
 )
 

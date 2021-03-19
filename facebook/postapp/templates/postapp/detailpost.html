@@ -79,8 +79,20 @@
                 <p class="text-justify">{{singlepost.contain}}</p>
               </a>
               <hr>
-
+              <!-- LIKES -->
               
+              <form action="{% url 'likepost' singlepost.id %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{singlepost.id}}" id="{{singlepost.id}} ">
+
+        
+          
+          <button type="submit" class="btn btn-info"> {{ singlepost.liked.all.count }}  Like</button>
+          
+        </form>
+        
+     
+
               
               <hr>
 
@@ -91,7 +103,9 @@
                     class="rounded-image">
                   <div class="d-flex flex-column ml-2"> <span class="name">{{comment.profile.usr.username }}</span>
                     <small class="comment-text">{{ comment }}</small>
-                    <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>
+                    <div class="d-flex flex-row align-items-center status"> <small>
+                   Like
+                    </small> <small>
                         <a data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false"
                           aria-controls="collapseExample">
                           Reply

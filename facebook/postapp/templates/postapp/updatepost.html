@@ -15,8 +15,8 @@
 
         {% csrf_token %}
     
-        {% if update_form %}
-        {{update_form.as_p}}
+        {% if form %}
+        {{form.as_p}}
         {% endif %}
         <button type="submit">Post</button>
     
