@@ -77,7 +77,8 @@
 
 
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
+        data-bs-target="#exampleModal" id="js-create-book">
           Create Post
         </button>
 
@@ -124,6 +125,8 @@
       <!-- ./feed -->
 
   {% for post in postlist reversed %}
+  {% if post.user in  list_of_friends %}
+
 
   <div class="container mt-5 mb-5">
     <div class="row d-flex align-items-center justify-content-center">
@@ -236,6 +239,7 @@
                   </div>
                 </div>
               </div>
+
               {% endfor %}
             </div>
 
@@ -274,6 +278,164 @@
       </div>
     </div>
   </div>
+
+
+  <!-- ---------------------- -->
+
+  {% elif post.user ==  profiledetial.user %}
+
+  <div class="container mt-5 mb-5">
+    <div class="row d-flex align-items-center justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="d-flex justify-content-between p-2 px-3">
+            <a href="{% url 'profile' %}">
+              <div class="d-flex flex-row align-items-center"> <img src="{{profiledetial.profile_pic.url}}" width="50"
+                  class="rounded-circle">
+                <div class="d-flex flex-column ml-2"> <span class="font-weight-bold">{{post.user.first_name}}</span>
+                  <small class="text-primary">{{post.created}}</small>
+                </div>
+              </div>
+            </a>
+
+ <!-- Default dropright button -->
+ <div class="btn-group dropright">
+  <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="d-flex flex-row-reverse">
+
+      <div class="p-2 px-3">
+       
+           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+             class="bi bi-three-dots-vertical float-right" viewBox="0 0 16 16">
+             <path
+               d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+           </svg></div>
+   
+   </div>
+  </button>
+  <div class="dropdown-menu">
+    <a href="{% url 'update' post.id  %}" > update</a>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i
+          class="fa fa-smile-o ml-2"></i> </div>
+      <div class="d-flex flex-row muted-color"> <span></span> <span class="ml-2">
+          {% if request.user.is_authenticated %}
+          <form method="POST" action="{% url 'delete' post.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Delete ">
+          </form>
+          {% else %}
+          <p>hi</p>
+          {% endif %}
+        </span> </div>
+    </div>
+ 
+  </div>
+</div>
+
+            <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">{{post.date}}</small> <i
+                class="fa fa-ellipsis-h"></i> </div>
+          </div> <img src="{{post.image.url }}" class="img-fluid">
+          <div class="p-2">
+            <a class="text-dark" href="{% url 'detailpost' post.id %}">
+              <p class="text-justify">{{post.contain}}</p>
+            </a>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i
+                  class="fa fa-smile-o ml-2"></i> </div>
+              <div class="d-flex flex-row muted-color"> <span></span> <span class="ml-2">
+                  {% if request.user.is_authenticated %}
+                  <form method="POST" action="{% url 'delete' post.id %}">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete ">
+                  </form>
+                  {% else %}
+                  <p>hi</p>
+                  {% endif %}
+                </span> </div>
+            </div>
+            <hr>
+
+            <div class="comments">
+              {% for comment in comment %}
+              {% if comment.post == post %}
+
+              <div class="d-flex flex-row mb-2"> <img src="{{ comment.profile.profile_pic.url }}" width="40" class="rounded-image">
+                <div class="d-flex flex-column ml-2"> <span class="name">{{comment.profile.usr.username }}</span>
+                  <small class="comment-text">{{ comment }}</small>
+                  <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>
+                    <a  data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false" aria-controls="collapseExample">
+                     Reply 
+                    </a>
+                  </small>
+                    <small><a  data-toggle="collapse" href="#collapsereplies" role="button" aria-expanded="false" aria-controls="collapseExample">
+                      see comment replies 
+                     </a></small> <small>18 mins</small>
+                  </div>
+                </div>
+              </div>
+
+
+              <!-- for rendering replies -->
+              <div class="collapse" id="collapsereplies">
+              {% for reply in comment.replies.all %}
+
+              <div class="d-flex flex-row mb-2"> <img src="{{ comment.profile.profile_pic.url }}" width="40" class="rounded-image">
+                <div class="d-flex flex-column ml-2"> <span class="name">{{reply.profile.usr.username }}</span>
+                  <small class="comment-text">{{ reply }}</small>
+                  <div class="d-flex flex-row align-items-center status"> <small>Like</small> <small>
+                    <a  data-toggle="collapse" href="#collapsereply" role="button" aria-expanded="false" aria-controls="collapseExample">
+                     Reply 
+                    </a>
+                  </small>
+                    <small><a  data-toggle="collapse" href="#collapsereplies" role="button" aria-expanded="false" aria-controls="collapseExample">
+                      see comment replies 
+                     </a></small> <small>18 mins</small>
+                  </div>
+                </div>
+              </div>
+
+              {% endfor %}
+            </div>
+
+            
+            <!-- for reply on comment -->
+
+              <div class="collapse" id="collapsereply">
+                <div class="card card-body">
+                  <form method="GET" action="{% url 'reply' %}">
+                    {% csrf_token %}          
+                    <input class="form-control" type="text" placeholder="reply comment" name="comment" required>
+                    <input type="hidden"  name="postid" value="{{ post.id}}">                    
+                    <input type="hidden"  name="commentid" value="{{comment.id}}">        
+                    <button class="btn btn-outline btn-small" type="submit"> Reply</button>
+                    </form>
+                </div>
+              </div>
+
+              {% endif %}
+              {% endfor %}
+
+
+  
+              <div class="comment-input"> <form method="GET" action="{% url 'comments' %}">
+                {% csrf_token %}     
+                <input class="form-control" type="text" placeholder="reply comment" name="comment" required >
+                <input type="hidden"  name="postid" value="{{ post.id}}">
+                <input type="hidden"  name="commentid" value="">           
+                <button type="submit" class="form-control btn btn-outline-primary"> comment</button>
+                </form>
+                <div class="fonts"> <i class="fa fa-camera"></i> </div>
+              </div>            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   {%endfor%}
 
 

@@ -6,11 +6,14 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
-from django.views.generic import View, CreateView,UpdateView
+from django.views.generic import View, CreateView, UpdateView
 from django.shortcuts import render, redirect, HttpResponseRedirect
 
-from .models import UserProfile
+from postapp.models import Post
+from postapp.forms import PostForm
+from .models import UserProfile, FriendRequest
 from .forms import ProfileForm, ExtendedUser, UserLoginForm
+        
 
 
 class UserSignUpView(View):
@@ -27,7 +30,7 @@ class UserSignUpView(View):
                 username = user_form.cleaned_data.get("username")
                 password = user_form.cleaned_data.get("password1")
                 signupuserlogin = authenticate(
-                    username=username, password=password)
+                username=username, password=password)
                 login(request, signupuserlogin)
                 return HttpResponseRedirect(reverse('profile'))
             else:
@@ -62,7 +65,7 @@ class UserLoginView(View):
                 if user is not None:
                     login(request, user)
                     return redirect('profile')
-                    
+
                 else:
                     print("error")
             else:
@@ -73,32 +76,45 @@ class UserLoginView(View):
     except Exception as e:
         print(e)
 
+
 class UserLogoutView(View):
-    def get(self,request):
+    def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse("home"))
 
 
-class ProfileView(View): 
-    def get(self,request):
+class ProfileView(View):
+    def get(self, request):
         profiledetial = UserProfile.objects.get(user=request.user)
-        from postapp.models import Post
-        from postapp.forms import PostForm
+      
         post_form = PostForm()
         postlist = Post.objects.all()
-        return render(request, 'profile.html', {"profile": profiledetial,
-                                                'postlist': postlist, "post_form": post_form})
+        friend_request=FriendRequest.objects.filter(request_accepter=request.user)
+        list_of_friends = profiledetial.friends.all()
+        # pdb.set_trace()
+        return render(request, 'profile.html', {
+            "profile": profiledetial,
+            'friend_request':friend_request,
+            'postlist': postlist, 
+            "post_form": post_form,
+            "list_of_friends":list_of_friends})
+
 
 class SearchView(View):
-    def get(self,request):
+    def get(self, request):
         searchname = request.GET.get('search_name')
         user_list = User.objects.filter(first_name__startswith=searchname)
         profiledetial = UserProfile.objects.get(user=request.user)
-        params = {'user_list': user_list, "profile": profiledetial}
+        list_of_friends = profiledetial.friends.all()
+        postlist = Post.objects.all()
+        post_form = PostForm()
+        params = {'user_list': user_list, "profile": profiledetial,
+        'list_of_friends':list_of_friends,'postlist':postlist,'post_form':post_form}
         return render(request, 'profile.html', params)
 
+
 class UpdateProfilePhoto(View):
-    def post(self,request):       
+    def post(self, request):
         image = request.FILES.get('image')
         profile_object = UserProfile.objects.get(user=request.user)
         profile_object.profile_pic = image
@@ -107,31 +123,47 @@ class UpdateProfilePhoto(View):
 
 
 class UpdateCoverPhoto(View):
-    def post(self,request):
+    def post(self, request):
         coverimage = request.FILES.get('coverimage')
         profile_object = UserProfile.objects.get(user=request.user)
         profile_object.profile_cover = coverimage
         profile_object.save()
         return redirect('/profile/')
 
+class FriendRequestView(View):
+    def post(self,request, id):
+        user = request.user
+        request_id = request.POST.get('request_id')
+        accepter = User.objects.get(id=request_id)
+        friend_request, created = FriendRequest.objects.get_or_create(
+            request_sender=user, request_accepter=accepter)
+        if created:
+            return HttpResponse("friend request send successfully ")
+        else:
+            return HttpResponse("friend request already send ")
+
+class AcceptRequestView(View):
+    def get(self,request,id):
+        accept_request=FriendRequest.objects.get(id=id) #get the request from Friend request model
+        accepter_user=UserProfile.objects.get(user=request.user) # user who is loged in and accet the request
+        sender_user=UserProfile.objects.get(user=accept_request.request_sender) #the request sender 
+        if accept_request.request_accepter==request.user: #if friendrequest model accepter is equal to current login user
+            accepter_user.friends.add(accept_request.request_sender) #in accept_user profile the sender will save
+            sender_user.friends.add(accept_request.request_accepter) #in sender _user profile the accepter  will save
+            accept_request.delete()  # the friendRequest model object will delete after succesfully accept
+            return HttpResponse("request accepted successfully ")
+        else:
+            return HttpResponse("request can't accepted ")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class UnfriendView(View):
+    def get(self,request,id):
+        friend=User.objects.get(id=id)   
+        firend_list_of_user=UserProfile.objects.get(user=request.user)      
+        firend_list_of_friend=UserProfile.objects.get(user=friend)
+        firend_list_of_user.friends.remove(friend)
+        firend_list_of_friend.friends.remove(request.user)
+        return HttpResponseRedirect(reverse('profile'))
 
 
 

@@ -53,22 +53,31 @@
                     </form>
                 </div>
 
-                {% if user_list %}
+                {% if user_list  %}
                 {% for user in user_list %}
-
+                {% if user == profile.user %}               
+                {% else%}
                 <div class="card" style="width: 18rem;">
                     <!-- <img src="..." class="card-img-top" alt="..."> -->
                     <div class="card-body">
+                        <form action="{% url 'friendrequest' user.id %}" method="POST">
+                            {% csrf_token %}
                         <h5 class="card-title">{{ user.first_name }}</h5>
-                        <a href="#" class="btn btn-primary">Add Friend</a>
+                            {% if user  in list_of_friends %}     
+                           <button class="btn btn-warning "><a class="text-decoration-none" href="/unfriend/{{user.id}}">unfriend </a></button>
+                            {% else %}
+
+                            <input type="hidden" value="{{user.id}}" name="request_id">
+                            <button type="submit" class="btn btn-primary ">Add friend</button>
+                            {% endif %}
+
+                        </form>
+                        
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
                 {% endif %}
-
-
-
-
 
                 <div class="td" id="f-name-l"><span>{{profile.user.username}}</span>
                     <button class="btn btn-outline-danger me-2" type="button"><a
@@ -205,24 +214,32 @@
                         </div>
                     </div>
                     <div class="l-cnt l-mrg">
-                        <div class="cnt-label">
-                            <i class="l-i" id="l-i-k"></i>
-                            <span>Did You Know<i id="k-nm">1</i></span>
-                        </div>
-                        <div>
-                            <div class="q-ad-c">
-                                <a href="#" class="q-ad">
-                                    <img src="https://imagizer.imageshack.com/img923/1849/4TnLy1.png">
-                                    <span>My favorite superhero is...</span>
-                                </a>
+
+                  
+                        {% if friend_request %}
+                        {%for request in friend_request %}
+                        <h1>{{request}}</h1>
+                        <a href="/acceptrequest/{{request.id}}">Accept request</a>
+                        {% endfor %}
+                        {% else %}
+                        <h5>no new request</h5>
+                        {% endif %}
+                    </div>
+                        <!-- friend_list  -->
+                    <div class="l-cnt l-mrg">
+                        {% for friend in list_of_friends %}
+                        <div class="tb">
+                            <a href="{% url 'profile' %}" class="td p-p-pic"><img src="{{friend.userprofile.profile_pic.url }}"
+                                    alt="Rajeev's profile pic"></a>
+                            <div class="td p-r-hdr">
+                                <div class="p-u-info">
+                                    <a href="#">{{friend.username}}</a> 
+                                </div>     
                             </div>
-                            <div class="q-ad-c">
-                                <a href="#" class="q-ad" id="add_q">
-                                    <i class="material-icons">add</i>
-                                    <span>Add Answer</span>
-                                </a>
-                            </div>
                         </div>
+                        {% endfor %}
+
+                  
                     </div>
                     <div id="t-box">
                         <a href="#">Privacy</a> <a href="#">Terms</a> <a href="#">Advertising</a> <a href="#">Ad
@@ -297,6 +314,7 @@
                         <div class="post">
 
                             {% for post in postlist %}
+                            {% if post.user in  list_of_friends %}
                             <div class="tb">
                                 <a href="{% url 'profile' %}" class="td p-p-pic"><img src="{{profile.profile_pic.url }}"
                                         alt="Rajeev's profile pic"></a>
@@ -326,6 +344,38 @@
                                     </form>
 
                                 </div>
+                                {% elif post.user ==  profile.user %}
+                                <div class="tb">
+                                    <a href="{% url 'profile' %}" class="td p-p-pic"><img src="{{profile.profile_pic.url }}"
+                                            alt="Rajeev's profile pic"></a>
+                                    <div class="td p-r-hdr">
+                                        <div class="p-u-info">
+                                            <a href="#">{{post.user.username}}</a> 
+                                        </div>
+                                        
+                                    </div>
+    
+                                </div>
+                                <a href="{% url 'detailpost' post.id %}" class="p-cnt-v">
+                                    <p>{{ post.contain }} | {{ post.date }}</p>
+                                    <img src="{{ post.image.url }}" width="100px" height="500px"
+                                        style="padding-left: 100px; padding-right: 100px;">
+                                </a>
+                                {{post.id}}
+                                <div>
+    
+                                    <div class="p-acts">
+                                        <form method="GET" action="{% url 'comments'}">
+                                            {% csrf_token %}
+    
+                                            <input type="text" placeholder="reply comment" name="comment">
+                                            <input type="hidden" name="postid" value="{{ posts.id}}">
+                                            <button type="submit"> Reply</button>
+                                        </form>
+    
+                                    </div>
+                                {% else %}
+                                {% endif %}
                                 {% endfor %}
 
                             </div>

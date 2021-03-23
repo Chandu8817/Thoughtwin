@@ -1,7 +1,9 @@
 from datetime import datetime
 from django.urls import reverse
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
@@ -23,11 +25,15 @@ class CreateView(View):
             post = post_form.save()
             post.user = request.user
             self.context['post_form'] = post_form
+            self.context['form_is_valid']=True
             post.save()
+        else:
+            self.context['form_is_valid']=False
         return HttpResponseRedirect(reverse('postlist'))
-
     def get(self, request):
+        # html_form= render_to_string(self.template, self.context,request=request)
         return render(request, self.template, self.context)
+        # return JsonResponse('html_form':html_form)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -38,12 +44,16 @@ class RetrieveView(ListView):
         usercomment = Comment.objects.filter(reply=None)
         count = usercomment.count
         post_list = Post.objects.all()
+        list_of_friends = profiledetial.friends.all()
+
         post_form = PostForm()
         context['post_form'] = post_form
         context['postlist'] = post_list
         context['profiledetial'] = profiledetial
         context['comment'] = usercomment
         context['count'] = count
+        context['list_of_friends'] = list_of_friends
+
         return render(request, 'postapp/home.html', context)
 
 
