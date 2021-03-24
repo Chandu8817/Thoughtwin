@@ -12,8 +12,8 @@ class Post(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
 
     contain=models.TextField(max_length=400 ,null=True) 
-    image=models.ImageField(upload_to='images/postimage')
-    liked=models.ManyToManyField(User,null=True,blank=True, related_name='like')
+    image=models.ImageField(upload_to='images/postimage',default="",blank=True,null=True)
+    liked=models.ManyToManyField(User,blank=True, related_name='like')
     created=models.DateTimeField(auto_now_add=True) 
     # updated =
     

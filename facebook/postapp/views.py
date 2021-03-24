@@ -8,7 +8,8 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import View, UpdateView, ListView, DetailView
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect,HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import PostForm
 from .models import Post, Comment,Likes
@@ -19,17 +20,35 @@ from account.models import UserProfile
 class CreateView(View):
     context = {}
     template = 'postapp/createpost.html'
-    def post(self, request):
-        post_form = PostForm(request.POST, request.FILES)
-        if post_form.is_valid():
-            post = post_form.save()
-            post.user = request.user
-            self.context['post_form'] = post_form
-            self.context['form_is_valid']=True
-            post.save()
-        else:
-            self.context['form_is_valid']=False
-        return HttpResponseRedirect(reverse('postlist'))
+    # def post(self, request):
+        # post_form = PostForm(request.POST, request.FILES)
+        # if post_form.is_valid():
+        #     post = post_form.save()
+        #     post.user = request.user
+        #     self.context['post_form'] = post_form
+        #     self.context['form_is_valid']=True
+        #     post.save()
+        # else:
+        #     self.context['form_is_valid']=False
+        # # return HttpResponseRedirect(reverse('postlist'))
+        # return HttpResponse("post successfully submit ")
+
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, request, *args, **kwargs):
+    #     return super(CreateView, self).dispatch(request, *args, **kwargs)
+
+    def post(self,request, *args, **kwargs):
+        print(request.POST)
+        image=request.FILES.get('file')
+        # import pdb; pdb.set_trace()
+        post_contain=request.POST.get('post_contain')
+
+        post=Post.objects.create(user=request.user,contain=post_contain,image=image)
+        data={}
+        data['post_contain']= post.contain
+        # data['post_image']=post.image
+        data['date']=post.created
+        return JsonResponse(data)
     def get(self, request):
         # html_form= render_to_string(self.template, self.context,request=request)
         return render(request, self.template, self.context)
@@ -54,7 +73,7 @@ class RetrieveView(ListView):
         context['count'] = count
         context['list_of_friends'] = list_of_friends
 
-        return render(request, 'postapp/home.html', context)
+        return render(request, 'postapp/posts.html', context)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -62,18 +81,16 @@ class PostDetailView(DetailView):
     def get(self, request, id):
         context = {}
         profiledetial = UserProfile.objects.get(user=request.user)
+        
         obj = get_object_or_404(Post, id=id)
         usercomment = Comment.objects.filter(reply=None, post=obj)
         count = usercomment.count
         singlepost = Post.objects.get(id=id)
         context['singlepost'] = singlepost
         context['comment'] = usercomment
-        context['profiledetial'] = profiledetial
+        context['profile'] = profiledetial
         context['count'] = count 
         return render(request, 'postapp/detailpost.html', context)
-    
-
-
 
 
 @method_decorator(login_required, name='dispatch')
@@ -87,7 +104,8 @@ class PostUpdateView(UpdateView):
 
 @method_decorator(login_required, name='dispatch')
 class PostDeleteView(View):
-    def post(self, request, id):
+    def post(self, request,id):
+        # id=request.POST.get('post_id')
         obj = Post.objects.get(id=id)
         user = UserProfile.objects.get(user=request.user)
         if request.method == "POST":
@@ -95,7 +113,8 @@ class PostDeleteView(View):
                 print("user not valid")
             else:
                 obj.delete()
-        return HttpResponseRedirect(reverse('postlist'))
+        data={'message': 'delete successfully'}
+        return JsonResponse(data)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -130,33 +149,29 @@ class ReplyView(View):
             print(e)
             print("profile not found ")
 
-def postLike(request,id):
 
+def postLike(request,id):
     post_id=request.POST.get('post_id')
     user=request.user
-
     post=get_object_or_404(Post, id=post_id)
-
     if user in post.liked.all():
         post.liked.remove(user)
     else:
         post.liked.add(user)
-
-        likes,created=Likes.objects.get_or_create(user=user,id=post_id)
-
+        likes,created=Likes.objects.get_or_create(user=user,post=post)
         if not created:
             if likes.value=='like':
                 likes.value='unlike'
             else:
                 likes.value='like'
         likes.save()
-
-
     return HttpResponseRedirect(reverse('detailpost',args=[str(id)] ))
 
 
-
-
+class LikePostView(View):
+    def get(self, request):
+        print(request.GET)
+        return JsonResponse({"success":True,"message":"Hello from backend!!!"})
 
 
 

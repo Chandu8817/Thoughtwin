@@ -13,18 +13,28 @@
   <link rel="stylesheet" href="{% static 'css/detail.css'%}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- <script>
+ <!-- <script>
   $(document).ready(function(){
       $("#like_color").click(function(){
         $("#change-color").css("background-color", "red");
       });
     });
-    </script>
+    </script> -->
   <title>POST DETAIL</title>
 </head>
 
 <body>
+
+  <!-- <header> -->
+    {% include 'base1.html' %}
+
+
+  <!-- </header> -->
+
+
+
   <div class="container">
+
 
 
 
@@ -34,7 +44,7 @@
           <div class="card">
             <div class="d-flex justify-content-between p-2 px-3">
               <a href="{% url 'profile' %}">
-                <div class="d-flex flex-row align-items-center"> <img src="{{profiledetial.profile_pic.url}}" width="50"
+                <div class="d-flex flex-row align-items-center"> <img src="{{singlepost.user.userprofile.profile_pic.url}}" width="50"
                     class="rounded-circle">
                   <div class="d-flex flex-column ml-2"> <span
                       class="font-weight-bold">{{singlepost.user.first_name}}</span>
@@ -64,7 +74,7 @@
                           class="fa fa-smile-o ml-2"></i> </div>
                       <div class="d-flex flex-row muted-color"> <span></span> <span class="ml-2">
                           {% if request.user.is_authenticated %}
-                          <form method="POST" action="{% url 'delete' singlepost.id %}">
+                          <!-- <form method="POST" action="{% url 'delete' singlepost.id %}"> -->
                             {% csrf_token %}
                             <input type="submit" value="Delete ">
                           </form>
@@ -84,18 +94,26 @@
             </div> <img src="{{singlepost.image.url }}" class="img-fluid">
             <div class="p-2">
               <a class="text-dark" href="{% url 'detailpost' singlepost.id %}">
-                <p class="text-justify">{{singlepost.contain}}</p>
+                <p class="text-justify ">{{singlepost.contain}}</p>
               </a>
               <hr>
               <!-- LIKES -->
-              
+              <div>
               <form action="{% url 'likepost' singlepost.id %}" method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{singlepost.id}}" id="{{singlepost.id}} ">         
-          <div id="change-color"><button type="submit" class="btn " id="like_color"> {{ singlepost.liked.all.count }}  Like</button>
-          </div>
+                <input type="hidden" name="post_id" value="{{singlepost.id}}" id="{{singlepost.id}} "> 
+                {% if profile.user in singlepost.liked.all %}   
+         <button type="submit" class="btn btn-outline-danger  " id="like_color">  Unlike</button>
+
+          {% else %}
+         <button type="submit" class="btn btn-outline-primary " id="like_color">Like</button>
+
+ {%endif%}
+          
         </form>
-        
+
+        <button class="btn "> {{ singlepost.liked.all.count }} Likes </button>
+      </div>
      
 
               

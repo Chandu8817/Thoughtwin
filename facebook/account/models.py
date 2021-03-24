@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     ,default="images/profile/profile-default.png" )
     profile_cover=models.ImageField(upload_to="images/coverimage"
     ,default="images/coverimage/cover-def.png")
-    friends=models.ManyToManyField(User,blank=True,related_name="friends",null=True)
+    friends=models.ManyToManyField(User,blank=True,related_name="friends")
 
     def __str__(self):
         return self.user.username

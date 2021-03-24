@@ -1,0 +1,79 @@
+<html lang="en">
+  {% load static %}
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/header.css' %}">
+
+  <title>Document</title>
+</head>
+<body>
+
+    {% block header %}
+  <header>
+    <div class="tb">
+        <div class="td" id="logo">
+            <a href="#"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <div class="td" id="search-form">
+            <form method="GET" action="{% url 'search' %}">
+                <!-- {% csrf_token %} -->
+                <input type="text" placeholder="Search Facebook" name="search_name">
+                <button type="submit"><i class="material-icons">search</i></button>
+            </form>
+        </div>
+
+        {% if user_list  %}
+        {% for user in user_list %}
+        {% if user == profile.user %}               
+        {% else%}
+        <div class="card" style="width: 18rem;">
+            <!-- <img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body">
+                <form action="{% url 'friendrequest' user.id %}" method="POST">
+                    {% csrf_token %}
+                <h5 class="card-title">{{ user.first_name }}</h5>
+                    {% if user  in list_of_friends %}     
+                   <button class="btn btn-warning "><a class="text-decoration-none" href="/unfriend/{{user.id}}">unfriend </a></button>
+                    {% else %}
+
+                    <input type="hidden" value="{{user.id}}" name="request_id">
+                    <button type="submit" class="btn btn-primary ">Add friend</button>
+                    {% endif %}
+
+                </form>
+                
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <div class="td" id="f-name-l"><span>{{profile.user.username}}</span>
+            <button class="btn btn-outline-danger me-2" type="button"><a
+                    href="{% url 'logout' %}">logout</a></button>
+        </div>
+        <div class="td" id="i-links">
+            <div class="tb">
+                <div class="td" id="m-td">
+                    <div class="tb">
+                        <span class="td"><i class="material-icons">person_add</i></span>
+                        <span class="td"><i class="material-icons">chat_bubble</i></span>
+                        <span class="td m-active"><i class="material-icons">notifications</i></span>
+                    </div>
+                </div>
+                <div class="td">
+                    <a href="#" id="p-link">
+                        {% if profile %}
+                        <img src="{{ profile.profile_pic.url }}">
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endblock%}
+</body>
+</html>
