@@ -11,13 +11,11 @@ urlpatterns =[
     path('<int:id>/',PostDetailView.as_view(),name='detailpost'),
     # path('update/<int:id>/',views.updateView,name='update'),
     path('update/<pk>/',PostUpdateView.as_view(),name='update'),
-    path('delete/<int:id>/',PostDeleteView.as_view(),name='delete'),
-    # path('delete/',PostDeleteView.as_view(),name='delete'),
-
+    # path('delete/<int:id>/',PostDeleteView.as_view(),name='delete'),
+    path('delete/',PostDeleteView.as_view(),name='delete'),
     path('comments/',CommentView.as_view(),name='comments'),
     path('reply/',ReplyView.as_view(),name='reply'),
-    path('like/<int:id>/',views.postLike,name='likepost'),
-    
-    path('likepost/',views.LikePostView.as_view(),name='likepost-xyz'),
+    # path('like/<int:id>/',views.postLike,name='likepost'),
+    path('likepost/',views.LikePostView.as_view(),name='likepost'),
 
 ]

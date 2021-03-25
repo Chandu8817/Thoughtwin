@@ -12,47 +12,27 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRe
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import PostForm
-from .models import Post, Comment,Likes
+from .models import Post, Comment
 from account.models import UserProfile
 
 
 @method_decorator(login_required, name='dispatch')
 class CreateView(View):
     context = {}
+    context1 = {}
     template = 'postapp/createpost.html'
-    # def post(self, request):
-        # post_form = PostForm(request.POST, request.FILES)
-        # if post_form.is_valid():
-        #     post = post_form.save()
-        #     post.user = request.user
-        #     self.context['post_form'] = post_form
-        #     self.context['form_is_valid']=True
-        #     post.save()
-        # else:
-        #     self.context['form_is_valid']=False
-        # # return HttpResponseRedirect(reverse('postlist'))
-        # return HttpResponse("post successfully submit ")
-
-    # @method_decorator(csrf_exempt)
-    # def dispatch(self, request, *args, **kwargs):
-    #     return super(CreateView, self).dispatch(request, *args, **kwargs)
+    template2 = 'postapp/newpostdata.html'
 
     def post(self,request, *args, **kwargs):
         print(request.POST)
         image=request.FILES.get('file')
-        # import pdb; pdb.set_trace()
         post_contain=request.POST.get('post_contain')
-
         post=Post.objects.create(user=request.user,contain=post_contain,image=image)
-        data={}
-        data['post_contain']= post.contain
-        # data['post_image']=post.image
-        data['date']=post.created
-        return JsonResponse(data)
+        self.context1['post']=post
+        return render(request, self.template2, self.context1)
     def get(self, request):
-        # html_form= render_to_string(self.template, self.context,request=request)
         return render(request, self.template, self.context)
-        # return JsonResponse('html_form':html_form)
+       
 
 
 @method_decorator(login_required, name='dispatch')
@@ -68,7 +48,7 @@ class RetrieveView(ListView):
         post_form = PostForm()
         context['post_form'] = post_form
         context['postlist'] = post_list
-        context['profiledetial'] = profiledetial
+        context['profile'] = profiledetial
         context['comment'] = usercomment
         context['count'] = count
         context['list_of_friends'] = list_of_friends
@@ -104,8 +84,8 @@ class PostUpdateView(UpdateView):
 
 @method_decorator(login_required, name='dispatch')
 class PostDeleteView(View):
-    def post(self, request,id):
-        # id=request.POST.get('post_id')
+    def post(self, request):
+        id=request.POST.get('del_id')
         obj = Post.objects.get(id=id)
         user = UserProfile.objects.get(user=request.user)
         if request.method == "POST":
@@ -150,28 +130,22 @@ class ReplyView(View):
             print("profile not found ")
 
 
-def postLike(request,id):
-    post_id=request.POST.get('post_id')
-    user=request.user
-    post=get_object_or_404(Post, id=post_id)
-    if user in post.liked.all():
-        post.liked.remove(user)
-    else:
-        post.liked.add(user)
-        likes,created=Likes.objects.get_or_create(user=user,post=post)
-        if not created:
-            if likes.value=='like':
-                likes.value='unlike'
-            else:
-                likes.value='like'
-        likes.save()
-    return HttpResponseRedirect(reverse('detailpost',args=[str(id)] ))
-
-
 class LikePostView(View):
-    def get(self, request):
-        print(request.GET)
-        return JsonResponse({"success":True,"message":"Hello from backend!!!"})
+    def post(self,request):
+    
+        post_id=request.POST.get('like_id')
+        user=request.user
+        post=get_object_or_404(Post, id=post_id)
+        if user in post.liked.all():
+            post.liked.remove(user)
+            data={}
+            data['count']=post.likes_count
+        else:
+            post.liked.add(user)
+            data={}
+            data['count']=post.likes_count
+        return JsonResponse(data)
+
 
 
 

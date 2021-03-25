@@ -7,6 +7,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -38,7 +40,7 @@
 
 
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5 mb-5" id="single-post">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="col-md-6">
           <div class="card">
@@ -52,6 +54,8 @@
                   </div>
                 </div>
               </a>
+              {% if singlepost.user == profile.user %}
+
               <!-- Default dropright button -->
                 <div class="btn-group dropright">
                   <button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,24 +71,28 @@
                    
                    </div>
                   </button>
+
                   <div class="dropdown-menu">
                     <a href="{% url 'update' singlepost.id  %}" > update</a>
                     <div class="d-flex justify-content-between align-items-center">
                       <div class="d-flex flex-row icons d-flex align-items-center"> <i class="fa fa-heart"></i> <i
                           class="fa fa-smile-o ml-2"></i> </div>
                       <div class="d-flex flex-row muted-color"> <span></span> <span class="ml-2">
-                          {% if request.user.is_authenticated %}
-                          <!-- <form method="POST" action="{% url 'delete' singlepost.id %}"> -->
-                            {% csrf_token %}
-                            <input type="submit" value="Delete ">
-                          </form>
-                          {% else %}
-                          <p>hi</p>
-                          {% endif %}
+                        {% if request.user.is_authenticated %}
+                        <div >
+                          {% csrf_token %}
+                          <input type="hidden" id="del-id" value="{{singlepost.id}}">
+                          <input type="submit" id="del-btn" value="Delete ">
+                        </div>
+                        {% else %}
+                        <p>hi</p>
+                        {% endif %}
                         </span> </div>
                     </div>
                  
                   </div>
+                  {% endif %}
+
                 </div>
 
             
@@ -99,26 +107,19 @@
               <hr>
               <!-- LIKES -->
               <div>
-              <form action="{% url 'likepost' singlepost.id %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="post_id" value="{{singlepost.id}}" id="{{singlepost.id}} "> 
-                {% if profile.user in singlepost.liked.all %}   
-         <button type="submit" class="btn btn-outline-danger  " id="like_color">  Unlike</button>
+              <div>
+                
+                <input type="hidden" name="like-id" id="like-id" value="{{singlepost.id}}" > 
+                {% if profile.user in singlepost.liked.all %}
+         <button type="button"  id="like-btn" value="Like"><span class="material-icons" id='liked'>thumb_up_alt</span></button>
+              {% else%}
+         <button type="button" id="like-btn" value="Like"><span class="material-icons">thumb_up_off_alt </span></button>
+          {%endif%}
+        </div>
 
-          {% else %}
-         <button type="submit" class="btn btn-outline-primary " id="like_color">Like</button>
-
- {%endif%}
-          
-        </form>
-
-        <button class="btn "> {{ singlepost.liked.all.count }} Likes </button>
-      </div>
-     
-
-              
+        <button class="btn "> Likes :</button><span id="likes_count">{{ singlepost.liked.all.count }}</span>
+      </div>            
               <hr>
-
               <div class="comments">
                 {% for comment in comment %}
 
@@ -210,7 +211,7 @@
 
 
 
-  <!-- Optional JavaScript -->
+ 
 
 
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -223,6 +224,50 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+
+     <!-- Optional JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+  $(document).on('click', '#like-btn',function(e){
+    var like_id = $('#like-id').val();   
+    var my_data = {
+      "like_id" : like_id,
+      'csrfmiddlewaretoken': "{{ csrf_token }}",
+    }
+    $.ajax({
+    type:'POST',
+    url: '{% url "likepost" %}',
+    data:my_data,
+  success:function(json){
+    $('#likes_count').text(json.count)
+    if
+    $('#liked').text(thumb_up_alt)
+
+
+    },
+});
+});
+</script>
+
+<script>
+$(document).on('click', '#del-btn',function(e){
+  var del_id = $('#del-id').val();   
+  var my_data = {
+    "del_id" : del_id,
+    'csrfmiddlewaretoken': "{{ csrf_token }}",
+  }
+  $.ajax({
+  type:'POST',
+  url: '{% url "delete" %}',
+  data:my_data,
+success:function(json){
+  $("#single-posts").remove()
+  },
+});
+});
+</script>
 </body>
 
 </html>

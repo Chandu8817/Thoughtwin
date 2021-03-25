@@ -124,6 +124,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+
+
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'login'
+
+SOCIAL_AUTH_FACEBOOK_KEY = 816861679118829,       # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'ef97b592c4a516e0c1de0c389a28f05d',  # App Secre
 STATIC_URL = '/static/'
 MEDIA_URL='/media/'
 

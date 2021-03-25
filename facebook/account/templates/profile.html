@@ -31,15 +31,11 @@
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
-    -->
-
-
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.min.js" integrity="sha384-nsg8ua9HAw1y0W1btsyWgBklPnCUAFLuTMS2G72MMONqmOymq585AcH49TLBQObG" crossorigin="anonymous"></script>
+-->
 
     <main>
-
         {% include 'base1.html' %}
         <div id="profile-upper">
             <div id="profile-banner-image">
@@ -48,24 +44,16 @@
             <div id="profile-d">
                 <div id="profile-pic">
                     {% if profile %}
-
                     <img src=" {{ profile.profile_pic.url }}">
-
-
                     {% else %}
                     <img src="../../media/images/download.jpeg">
-
                     {% endif %}
                 </div>
-
                 <div id="u-name">{{profile.user.first_name}} {{profile.user.last_name}}</div>
                 <!-- for cover upadte and retirive -->
-
-
                 <div class="tb" id="m-btns">
                     <div id="i-box">
                         <form method="POST" enctype="multipart/form-data" action="{% url 'updatecover' %}">
-
                             {% csrf_token %}
                             <div class="cover-upload">
                                 <label for="fileinput">
@@ -75,21 +63,13 @@
                                 </label>
                                 <input id="fileinput" type="file" class="" name="coverimage" required>
 
-                                <!-- <button  type="submit">upload</button> -->
-
-
-                                <button type="submit"  class="btn btn-outline-primary" id="inputsubmit" >updatecover</button>
-
+                                <button type="submit" class="btn btn-outline-primary"
+                                    id="inputsubmit">updatecover</button>
                             </div>
                             <br><br>
-
-
                         </form>
-
-
                     </div>
                     <div class="td">
-
                         <div class="m-btn"><i class="material-icons">lock</i><span>Privacy</span></div>
                     </div>
                 </div>
@@ -107,29 +87,19 @@
                             <div class="lb-action"><i class="material-icons">edit</i></div>
                         </div>
                         <div id="i-box">
-                            <!-- <div id="intro-line">Web developer - UI</div>
-                            <div id="u-occ">Developing awesome UIs at <a href="#">Google LLC</a> Bengaluru and inspiring other companies to do so :)</div>
-                            <div id="u-loc"><i class="material-icons">location_on</i><a href="#">Bengaluru</a>, <a href="#">India</a></div> -->
-
                             <h1>upload</h1>
                             <form method="POST" enctype="multipart/form-data" action="{% url 'update' %}">
-
                                 {% csrf_token %}
                                 <input id="id_image" type="file" class="" name="image" required>
-                               
                                 <br><br><br><br>
                                 <button type="submit" class="btn btn-outline-primary">Upload Pic</button>
-
                             </form>
-
-
                         </div>
                     </div>
                     <div class="l-cnt l-mrg">
                         <div class="cnt-label">
                             <i class="l-i" id="l-i-p"></i>
                             <span>Photos</span>
-
                         </div>
                         <div id="photos">
                             <div class="tb">
@@ -151,9 +121,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="l-cnt l-mrg">
 
-                  
+                    <div class="l-cnt l-mrg">
                         {% if friend_request %}
                         {%for request in friend_request %}
                         <h1>{{request}}</h1>
@@ -163,22 +132,21 @@
                         <h5>no new request</h5>
                         {% endif %}
                     </div>
-                        <!-- friend_list  -->
+                    <!-- friend_list  -->
                     <div class="l-cnt l-mrg">
                         {% for friend in list_of_friends %}
                         <div class="tb">
-                            <a href="{% url 'profile' %}" class="td p-p-pic"><img src="{{friend.userprofile.profile_pic.url }}"
-                                    alt="Rajeev's profile pic"></a>
+                            <a href="{% url 'profile' %}" class="td p-p-pic"><img
+                                    src="{{friend.userprofile.profile_pic.url }}" alt="Rajeev's profile pic"></a>
                             <div class="td p-r-hdr">
                                 <div class="p-u-info">
-                                    <a href="#">{{friend.username}}</a> 
-                                </div>     
+                                    <a href="#">{{friend.username}}</a>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
-
-                  
                     </div>
+
                     <div id="t-box">
                         <a href="#">Privacy</a> <a href="#">Terms</a> <a href="#">Advertising</a> <a href="#">Ad
                             Choices</a> <a href="#">Cookies</a> <span id="t-more">More<i
@@ -194,69 +162,44 @@
                                     <div class="td active"><i class="material-icons">av_timer</i><span>TIMELINE</span>
                                     </div>
                                     <div class="td"><i class="material-icons">people</i><span>FRIENDS</span></div>
-                                    <div class="td"><i class="material-icons">NEW FEEDS</i><span><a href="{% url 'postlist'%}">POST</a></span></div>
+                                    <div class="td"><i class="material-icons">NEW FEEDS</i><span><a
+                                                href="{% url 'postlist'%}">POST</a></span></div>
                                     <div class="td"><i class="material-icons">explore</i><span>ABOUT</span></div>
                                     <div class="td"><i class="material-icons">archive</i><span>ARCHIVE</span></div>
                                 </div>
                             </div>
-                          
                         </div>
                     </div>
-                    <div class="m-mrg" id="composer">
-                          <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            Create Post
-          </button>
-  
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form method="POST" enctype="multipart/form-data" action="{% url 'createpost' %}">
-                    {% csrf_token %}
-  
-                    <ul class="list-inline" id='list_PostActions'>
-                      <li class='active'><a href='#'>Update status</a></li>
-                      <li>{{post_form.image}}</li>
-  
-                    </ul>
-                    {{post_form.contain}}
-  
-  
-                </div>
-                <div class="modal-footer">
-                  <ul class='list-inline post-actions'>
-                    <li><a href="#"><span class="glyphicon glyphicon-camera"></span></a></li>
-                    <li><a href="#" class='glyphicon glyphicon-user'></a></li>
-                    <li><a href="#" class='glyphicon glyphicon-map-marker'></a></li>
-                    <li class='pull-right'><button type="submit" class="btn btn-primary">Post</button>
-                    </li>
-                  </ul>
-  
-                </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <hr> 
-         </div>
-          <!-- ./post form --> 
-                   {% include 'postapp/postlist.html'%}
-            <div id="device-bar-2"><i class="fab fa-apple"></i></div>
+                    <div>
+                        {% include 'postapp/postlist.html' %}
+                    </div>
     </main>
 </body>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    var date = new Date();
-    document.getElementById('curr-year').innerHTML = date.getFullYear();
 
+    $(document).on('click', '#submit-post-btn', function (e) {
+
+        var formData = new FormData();
+        formData.append('file', $('#image_file')[0].files[0]);
+        formData.append('post_contain', $('#post_contain').val());
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "createpost" %}',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (json) {
+                $('#postlist').append($('#ajax-post-contain').json.post_contain);
+                console.log(json);
+
+            },
+        });
+    });
 
 </script>
-<script src="{% static 'js/script.js' %}"></script>
 
 </html>

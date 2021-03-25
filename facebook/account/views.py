@@ -172,6 +172,14 @@ class UnfriendView(View):
 
 
 
+# Create your views here.
+def login(request):
+  return render(request, 'social_login/login.html')
+
+@login_required
+def home(request):
+  return render(request, 'social_login/home.html')
+
 
 
 

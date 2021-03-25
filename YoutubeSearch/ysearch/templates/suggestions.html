@@ -1,0 +1,5 @@
+<ul id="country-list">
+    {% for item in items %}
+    <li onClick="selectName('{{item.snippet.title}}')">{{item.snippet.title}}</li>
+    {% endfor %}
+</ul>

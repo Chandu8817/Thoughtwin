@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <style>
+    .frmSearch {border: 1px solid #a8d4b1;background-color: #c6f7d0;margin: 2px 0px;padding:40px;border-radius:4px;}
+    #country-list{float:left;list-style:none;margin-top:-3px;padding:0;width:190px;position: absolute;}
+    #country-list li{padding: 10px; background: #f0f0f0; border-bottom: #bbb9b9 1px solid;}
+    #country-list li:hover{background:#ece3d2;cursor: pointer;}
+    #search-box{padding: 10px;border: #a8d4b1 1px solid;border-radius:4px;}
+    </style>
+</head>
+<body>
+    <div class="frmSearch">
+        <form id="searchForm" method="POST">
+            {% csrf_token %}
+            <input type="text" id="search-box" placeholder="Search" style="width:80%"/>
+            <input type="submit" value="Search" class="btn btn-primary">
+        </form>
+        <div id="suggesstion-box"></div>
+    </div>
+    <div id="result"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+    <script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search-box").keyup(function(){
+                $.ajax({
+                type: "GET",
+                url: {% url 'suggestions' %},
+                data:'search='+$(this).val(),
+                beforeSend: function(){
+                    $("#search-box").css("background","#FFF url(https://phppot.com/demo/jquery-ajax-autocomplete-country-example/loaderIcon.gif) no-repeat 165px");
+                },
+                success: function(data){
+                    $("#suggesstion-box").show();
+                    $("#suggesstion-box").html(data);
+                    $("#search-box").css("background","#FFF");
+                }
+                });
+            });
+            $("#searchForm").submit(function(event){
+                event.preventDefault();
+                $.ajax({
+                type: "POST",
+                url: {% url 'get-video-detail'%},
+                data:{
+                    'search':$('#search-box').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                success: function(data){
+                    $("#result").html(data);
+                }
+                });
+            });
+        });
+         function selectName(val) {
+            $("#search-box").val(val);
+            $("#suggesstion-box").hide();
+         }
+    </script>
+</body>
+</html>

@@ -10,13 +10,13 @@ class PostForm(forms.ModelForm):
         'placeholder': ' Whats on your Mind   ! ',
         'rows':"5",
         'max-width':'240',
-        'id': 'post-catain',
-        'name':'post_catain'}))
+        'id': 'post_contain',
+        'name':'post_contain'}))
     
     image= forms.ImageField(widget=forms.FileInput(attrs=
     {
-        'id':'post-image',
-        'name':'post_image',
+        'id':'image_file',
+        'name':'image_file',
     }))
 
     class Meta:

@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from account.models import UserProfile
 # Create your models here.
 
-LIKE_CHOICES=(
-    ('LIKE','like'),
-    ('UNLIKE','unlike'),
-)
+# LIKE_CHOICES=(
+#     ('LIKE','like'),
+#     ('UNLIKE','unlike'),
+# )
 class Post(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
 
@@ -19,7 +19,7 @@ class Post(models.Model):
     
 
     def __str__(self):
-        return self.contain 
+        return str(self.contain)
 
     @property
     def likes_count(self):
@@ -37,8 +37,8 @@ class Comment(models.Model):
         return str(self.comment)
 
 
-class Likes(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
-    post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True, blank=True)
-    value=models.CharField(choices=LIKE_CHOICES, default='LIKE',max_length=10)
+# class Likes(models.Model):
+#     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+#     post=models.ForeignKey(Post,on_delete=models.CASCADE,null=True, blank=True)
+#     value=models.CharField(choices=LIKE_CHOICES, default='LIKE',max_length=10)
 
