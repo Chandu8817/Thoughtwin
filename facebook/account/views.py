@@ -4,11 +4,9 @@ from django.urls import reverse
 from django.contrib import messages
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
-from django.views.generic import View, CreateView, UpdateView
+from django.views.generic import View
 from django.shortcuts import render, redirect, HttpResponseRedirect
-
 from postapp.models import Post
 from postapp.forms import PostForm
 from .models import UserProfile, FriendRequest
@@ -36,7 +34,7 @@ class UserSignUpView(View):
             else:
                 login_form = UserLoginForm()
                 return render(request, 'index.html', {'user_form': user_form,
-                                                      'profile_form': profile_form, 'login_form': login_form})
+                                                      'login_form': login_form})
             profile_form = ProfileForm()
             user_form = ExtendedUser()
             login_form = UserLoginForm()
@@ -47,14 +45,13 @@ class UserSignUpView(View):
 
 
 class UserLoginView(View):
-    try:
+
         def get(self, request):
             login_form = UserLoginForm()
             user_form = ExtendedUser()
             profile_form = ProfileForm()
             return render(request, 'index.html', {'login_form': login_form,
                                                   'user_form': user_form, 'profile_form': profile_form})
-
         def post(self, request):
             login_form = UserLoginForm(request, request.POST)
             if login_form.is_valid():
@@ -65,7 +62,6 @@ class UserLoginView(View):
                 if user is not None:
                     login(request, user)
                     return redirect('profile')
-
                 else:
                     print("error")
             else:
@@ -73,10 +69,6 @@ class UserLoginView(View):
                 profile_form = ProfileForm()
                 return render(request, 'index.html', {'login_form': login_form,
                                                       'user_form': user_form, 'profile_form': profile_form})
-    except Exception as e:
-        print(e)
-
-
 class UserLogoutView(View):
     def get(self, request):
         logout(request)
@@ -102,15 +94,23 @@ class ProfileView(View):
 
 class SearchView(View):
     def get(self, request):
-        searchname = request.GET.get('search_name')
-        user_list = User.objects.filter(first_name__startswith=searchname)
-        profiledetial = UserProfile.objects.get(user=request.user)
-        list_of_friends = profiledetial.friends.all()
-        postlist = Post.objects.all()
-        post_form = PostForm()
-        params = {'user_list': user_list, "profile": profiledetial,
-        'list_of_friends':list_of_friends,'postlist':postlist,'post_form':post_form}
-        return render(request, 'profile.html', params)
+        # import pdb; pdb.set_trace()
+        data={}
+        searchname = request.GET.get('search')
+        if searchname =="":
+            print("no data")
+        else:
+
+            user_list = User.objects.filter(first_name__startswith=searchname)[:5]
+            profiledetial = UserProfile.objects.get(user=request.user)
+            list_of_friends = profiledetial.friends.all()
+            postlist = Post.objects.all()
+            post_form = PostForm()
+            data = {'user_list': user_list, "profile": profiledetial,
+                'list_of_friends':list_of_friends,'postlist':postlist,'post_form':post_form}
+        data['searchname']=searchname
+
+        return render(request, 'suggestions.html', data)
 
 
 class UpdateProfilePhoto(View):
@@ -169,16 +169,6 @@ class UnfriendView(View):
 
 
 
-
-
-
-# Create your views here.
-def login(request):
-  return render(request, 'social_login/login.html')
-
-@login_required
-def home(request):
-  return render(request, 'social_login/home.html')
 
 
 

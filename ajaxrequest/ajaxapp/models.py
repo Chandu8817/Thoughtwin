@@ -6,7 +6,7 @@ class Task(models.Model):
 
     title=models.CharField(max_length=50)
     description=models.TextField(max_length=200)
-    completed=models.BooleanField(default=False,blank=True,null=True)
+    completed=models.BooleanField(default=False,blank=True)
 
 
     def __str__(self):

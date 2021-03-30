@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'postapp.apps.PostappConfig',
     'rest_framework',
     'api.apps.ApiConfig',
+
+
     
 
    
@@ -76,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'facebook.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -86,7 +87,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -106,7 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -119,33 +118,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-
-
-
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_URL = 'logout'
-LOGOUT_REDIRECT_URL = 'login'
-
-SOCIAL_AUTH_FACEBOOK_KEY = 816861679118829,       # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = 'ef97b592c4a516e0c1de0c389a28f05d',  # App Secre
 STATIC_URL = '/static/'
 MEDIA_URL='/media/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+# DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

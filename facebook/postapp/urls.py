@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required , permission_required
-from postapp.views import CreateView ,PostDetailView, RetrieveView,PostDeleteView ,ReplyView,CommentView,PostUpdateView
-from . import views
+from postapp.views import CreateView ,PostDetailView, RetrieveView,PostDeleteView ,ReplyView,CommentView,LikePostView, PostUpdateView
+# from account import views
 
 # app_name = 'postapp'
 
@@ -16,6 +16,6 @@ urlpatterns =[
     path('comments/',CommentView.as_view(),name='comments'),
     path('reply/',ReplyView.as_view(),name='reply'),
     # path('like/<int:id>/',views.postLike,name='likepost'),
-    path('likepost/',views.LikePostView.as_view(),name='likepost'),
+    path('likepost/',LikePostView.as_view(),name='likepost'),
 
 ]

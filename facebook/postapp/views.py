@@ -100,31 +100,41 @@ class PostDeleteView(View):
 @method_decorator(login_required, name='dispatch')
 class CommentView(View):
     def get(self, request):
+        data={}
         try:
-            post_id = request.GET.get("postid")
+            post_id = request.GET.get("cmt_post_id")
             comment = request.GET.get("comment")
             post_obj = Post.objects.get(id=post_id)
             profiledetial = UserProfile.objects.get(user=request.user)
-            Comment.objects.create(profile=profiledetial,
+            comment=Comment.objects.create(profile=profiledetial,
                                    post=post_obj, comment=comment)
+            data['newcomment']=comment
+
+            
         except Exception as e:
             print(e)
-        return HttpResponseRedirect("/post/"+str(post_id))
+        return render(request,'postapp/newcomment.html',data)
+
 
 
 @method_decorator(login_required, name='dispatch')
 class ReplyView(View):
     def get(self, request):
         try:
-            comment = request.GET.get("comment")
-            comment_id = request.GET.get("commentid")
-            comment_obj = Comment.objects.get(id=comment_id)
-            post_id = request.GET.get("postid")
+            data={}
+            comment_id = request.GET.get("comment_id")
+            reply_obj = Comment.objects.get(id=comment_id)
+            reply = request.GET.get("reply")
+            reply_obj = Comment.objects.get(id=comment_id)
+            post_id = request.GET.get("post_id")
             post_obj = Post.objects.get(id=post_id)
             profiledetial = UserProfile.objects.get(user=request.user)
-            Comment.objects.create(profile=profiledetial, post=post_obj,
-                                   comment=comment, reply=comment_obj)
-            return HttpResponseRedirect("/post/"+str(post_id))
+            reply=Comment.objects.create(profile=profiledetial, post=post_obj,
+                                   comment=reply, reply=reply_obj)
+                
+            data['reply']=reply
+            # return render(request,'postapp/newcomment.html',data)
+            return HttpResponse("reply done ")
         except Exception as e:
             print(e)
             print("profile not found ")
@@ -132,7 +142,6 @@ class ReplyView(View):
 
 class LikePostView(View):
     def post(self,request):
-    
         post_id=request.POST.get('like_id')
         user=request.user
         post=get_object_or_404(Post, id=post_id)
@@ -140,10 +149,13 @@ class LikePostView(View):
             post.liked.remove(user)
             data={}
             data['count']=post.likes_count
+            data['like']= 'unlike'
         else:
             post.liked.add(user)
             data={}
             data['count']=post.likes_count
+            data['like']= 'like'
+
         return JsonResponse(data)
 
 

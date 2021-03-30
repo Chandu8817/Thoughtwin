@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-from . import views
+# from . import views
 from account.views import (UserSignUpView, UserLoginView, UserLogoutView,
     ProfileView, SearchView, UpdateProfilePhoto,
      UpdateCoverPhoto,FriendRequestView,AcceptRequestView,UnfriendView)
@@ -28,10 +28,4 @@ urlpatterns = [
     path('friendrequest/<int:id>/', FriendRequestView.as_view(), name='friendrequest'),
     path('acceptrequest/<int:id>/',AcceptRequestView.as_view(), name='acceptrequest'),
     path('unfriend/<int:id>/',UnfriendView.as_view(), name='unfriend'),
-
-
-
-
-
-
 ]

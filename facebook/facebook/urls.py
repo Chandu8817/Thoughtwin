@@ -17,21 +17,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from account import views
-from django.contrib.auth import views as auth_views
+# from account import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('',include('fbapp.urls')),
     path('', include('account.urls')),
     path('post/', include('postapp.urls')),
-
-
-# social login 
-    path("login/", views.login, name="login1"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout1"),
-    path('social-auth/', include('social_django.urls', namespace="social")),
-    path("", views.home, name="home1"),
-
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
