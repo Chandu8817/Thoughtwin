@@ -1,0 +1,19 @@
+{% if newcomment %}
+
+<div class="d-flex flex-row mb-2"> <img src="{{ newcomment.user.userprofile.profile_pic.url }}" width="40"
+    class="rounded-image">
+  <div class="d-flex flex-column ml-2"> <span class="name">{{newcomment.usr.username }}</span>
+    <small class="comment-text">{{ newcomment }}</small>
+    <div class="d-flex flex-row align-items-center status">  <small>
+        
+      </small>
+      <small>
+        </small> <small>{{newcomment.date}}</small>
+    </div>
+
+    </div>     
+  </div>
+</div>
+{%endif%}
+
+

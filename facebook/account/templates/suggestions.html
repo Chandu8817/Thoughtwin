@@ -1,0 +1,55 @@
+<style>
+    .box {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0.8;
+        /* for demo purpose  */
+    }
+
+    .stack-top {
+        z-index: 9;
+        margin-left:20px;
+        margin-top: 100px;
+        /* for demo purpose  */
+    }
+</style>
+    <div class="card " style="width: 18rem;">
+        {% if user_list %}
+        {% for user in user_list %}
+        {% if user == profile.user %}
+        {% else%}
+
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <form action="{% url 'friendrequest' user.id %}" method="POST">
+                {% csrf_token %}
+                <h5 class="card-title">{{ user.first_name }}</h5>
+                {% if user in list_of_friends %}
+                <button class="btn btn-warning "><a class="text-decoration-none" href="/unfriend/{{user.id}}">unfriend
+                </a></button>
+
+               
+                {%else%}
+                <input type="hidden" value="{{user.id}}" name="request_id">
+                <button type="submit" class="btn btn-primary ">Add friend</button>
+                {% endif %}
+
+
+        
+      
+                
+                
+
+            </form>
+
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+
+    
