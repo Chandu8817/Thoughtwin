@@ -105,8 +105,8 @@ class CommentView(View):
             post_id = request.GET.get("cmt_post_id")
             comment = request.GET.get("comment")
             post_obj = Post.objects.get(id=post_id)
-            profiledetial = UserProfile.objects.get(user=request.user)
-            comment=Comment.objects.create(profile=profiledetial,
+            user =request.user
+            comment=Comment.objects.create(user=user,
                                    post=post_obj, comment=comment)
             data['newcomment']=comment
 
@@ -122,14 +122,16 @@ class ReplyView(View):
     def get(self, request):
         try:
             data={}
+           
+            
             comment_id = request.GET.get("comment_id")
             reply_obj = Comment.objects.get(id=comment_id)
             reply = request.GET.get("reply")
             reply_obj = Comment.objects.get(id=comment_id)
             post_id = request.GET.get("post_id")
             post_obj = Post.objects.get(id=post_id)
-            profiledetial = UserProfile.objects.get(user=request.user)
-            reply=Comment.objects.create(profile=profiledetial, post=post_obj,
+            user = request.user
+            reply=Comment.objects.create(user=user, post=post_obj,
                                    comment=reply, reply=reply_obj)
                 
             data['reply']=reply

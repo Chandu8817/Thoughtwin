@@ -11,11 +11,14 @@ class PostFbView(View):
         dec=request.POST.get('description')
 
         task = Task.objects.create(title=title,description=dec)
-
+        abc="[0.0, test1@yopmail.com, [test2@yopmail.com, check_graph@yopmail.com], test3@yopmail.com, test4@yopmail.com]"
+     
         data = {}
         data['title'] = task.title
         data['description'] = task.description
         data['id'] = task.id
+        data['abc'] = abc
+
 
         
 
@@ -23,6 +26,9 @@ class PostFbView(View):
 
     def get(self, request):
         tasklist=Task.objects.all()
+       
+        
+
         return render(request,'index.html',{'task':tasklist})
 
 

@@ -51,7 +51,11 @@
   
                 <div class="d-flex flex-row mt-1 ellipsis"> <small class="mr-2">{{post.date}}</small> <i
                     class="fa fa-ellipsis-h"></i> </div>
+                    {% if post.image %}
               </div> <img src="{{post.image.url }}" class="img-fluid">
+              <!-- {%else%} -->
+              {%endif%}
+
               <div class="p-2">
                 <a class="text-dark" href="{% url 'detailpost' post.id %}">
                   <p class="text-justify">{{post.contain}}</p>

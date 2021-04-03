@@ -97,20 +97,21 @@ class SearchView(View):
         # import pdb; pdb.set_trace()
         data={}
         searchname = request.GET.get('search')
-        if searchname =="":
-            print("no data")
-        else:
-
+        if searchname !="":
             user_list = User.objects.filter(first_name__startswith=searchname)[:5]
             profiledetial = UserProfile.objects.get(user=request.user)
             list_of_friends = profiledetial.friends.all()
             postlist = Post.objects.all()
             post_form = PostForm()
+            # requestlist=FriendRequest.objects.get()
+           
             data = {'user_list': user_list, "profile": profiledetial,
-                'list_of_friends':list_of_friends,'postlist':postlist,'post_form':post_form}
-        data['searchname']=searchname
-
-        return render(request, 'suggestions.html', data)
+                'list_of_friends':list_of_friends,'postlist':postlist,
+                'post_form':post_form,'searchname':searchname
+                }
+            return render(request, 'suggestions.html', data)
+        
+        return render(request, 'suggestions.html',)
 
 
 class UpdateProfilePhoto(View):

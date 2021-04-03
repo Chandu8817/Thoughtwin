@@ -13,15 +13,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="{% static 'css/detail.css'%}">
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+ 
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- <!-- <script>
-  $(document).ready(function(){
-      $("#like_color").click(function(){
-        $("#change-color").css("background-color", "red");
-      });
-    });
-    </script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  
+
+ 
   <title>POST DETAIL</title>
 </head>
 
@@ -30,6 +29,7 @@
     {% include 'base1.html' %}
   <!-- </header> -->
   <div class="container">
+
     <div class="container mt-5 mb-5" id="single-post">
       <div class="row d-flex align-items-center justify-content-center">
         <div class="col-md-6">
@@ -130,28 +130,39 @@
               {% for comment in comment %}
 
 
-                <div class="d-flex flex-row mb-2 "> <img src="{{ comment.profile.profile_pic.url }}" width="40"
+                <div class="d-flex flex-row mb-2 "> <img src="{{ comment.user.userprofile.profile_pic.url }}" width="40"
                     class="rounded-image">
-                  <div class="d-flex flex-column ml-2"> <span class="name">{{comment.profile.user.username }}</span>
+                  <div class="d-flex flex-column ml-2"> <span class="name">{{comment.user.username }}</span>
                     <small class="comment-text">{{ comment }}</small>
 
                     
                     <div class="d-flex flex-row align-items-center status">  <small>
 
                      
-                      <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapsereply{{comment.id}}" aria-expanded="false" aria-controls="replyBox{{comment.sno}}">
+                      <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#collapsereply{{comment.id}}">
                         Reply
                     </button>
-                
                       </small>
-                  
-                      <small>
-                      </small> <small>{{comment.date}}</small>
+                      <small>{{comment.date}}</small>
                     </div>
                   </div>
                 </div>
-      
+                       
+                      
+                         <!-- for reply on comment -->
                      <div class="collapse" id="collapsereply{{comment.id}}">
+                        <!-- for rendering replies -->
+                      {% for reply in comment.replies.all %}
+                      <div class="d-flex mb-2"> <img src="{{ reply.user.userprofile.profile_pic.url }}" width="25"
+                          class="rounded-image">
+                        <div class="d-flex flex-column ml-2"> <span class="name">{{reply.user.username }}</span>
+                          <small class="comment-text">{{ reply }}</small>
+                          <div class="d-flex flex-row align-items-center status"> 
+                           <small>{{comment.date}}</small>
+                          </div>
+                        </div>
+                      </div>                        
+                      {% endfor %}
                       <div class="card card-body">
                         <form method="GET" action="{% url 'reply' %}">
                           {% csrf_token %}
@@ -160,25 +171,8 @@
                           <input type="hidden" id="comment-id" name="comment_id" value="{{comment.id}}">
                           <button class="btn btn-outline btn-small" id="reply-btn" type="submit"> Reply</button>
                         </form>
-                      </div>
-                       <!-- for rendering replies -->
-                      {% for reply in comment.replies.all %}
-                      <div class="d-flex mb-2"> <img src="{{ reply.profile.profile_pic.url }}" width="25"
-                          class="rounded-image">
-                        <div class="d-flex flex-column ml-2"> <span class="name">{{reply.profile.usr.username }}</span>
-                          <small class="comment-text">{{ reply }}</small>
-                          <div class="d-flex flex-row align-items-center status"> 
-                           <small>{{comment.date}}</small>
-                          </div>
-                        </div>
-                      </div>
-                         
-                      {% endfor %}
-                       <!-- for reply on comment -->
-
-                 
-                 
-                    </div>                  
+                      </div>                
+                   </div>                  
               {% endfor %}             
       </div>
               <div class="comment-input">
@@ -210,17 +204,7 @@
     </div>
   </div>
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-     <!-- Optional JavaScript -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
 <script>
   $(document).on('click', '#like-btn',function(e){
     var like_id = $('#like-id').val();   
@@ -307,6 +291,7 @@ success:function(json){
 });
 });
 </script> -->
+
 </body>
 
 </html>

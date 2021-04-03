@@ -1,95 +1,108 @@
 <!doctype html> {%load static %}
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>Create Task </title>
-  </head>
-  <body>
-    <div class="container mt-5  ">
-        <div class="row">
-         
-          <div class="col-sm">
-            <div id="post-form" >
-               {% csrf_token %}
-                <div class="form-group">
-                  <label for="exampleFormControlInput1">Task title</label>
-                  <input type="text" class="form-control" id="task_title" name="task_title" placeholder=" task title ">
-                </div>         
-                <div class="form-group">
-                  <label for="exampleFormControlTextarea1">Task Description </label>
-                  <textarea class="form-control" id="task_des" name="task_des" rows="3"></textarea>
-                </div>
-                <button type="button" id="submit-post-btn" class="btn btn-primary">Submit</button>
-        
-              </div>
-        
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <title>Create Task </title>
+</head>
+
+<body>
+  <div class="container mt-5  ">
+    <div class="row">
+
+      <div class="col-sm">
+        <div id="post-form">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="exampleFormControlInput1">Task title</label>
+            <input type="text" class="form-control" id="task_title" name="task_title" placeholder=" task title ">
           </div>
-          <div class="col-sm">
-            <table class="table table-dark my_table">
-
-                <thead>
-                  <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">Task</th>
-                    <th scope="col">Description</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-               
-                  {% for task in task %}
-
-                  <tr >
-                    <td >{{task.id}}</td>                  
-                    <td>{{task.title}}</td>          
-                    <td>{{task.description}}</td>
-                 
-                  </tr>
-
-                  {% endfor %}
-               
-          
-                </tbody>
-              </table>
-            
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Task Description </label>
+            <textarea class="form-control" id="task_des" name="task_des" rows="3"></textarea>
           </div>
+          <button type="button" id="submit-post-btn" class="btn btn-primary">Submit</button>
+
         </div>
+
       </div>
-   
-    <!-- Optional JavaScript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-      <script>
-        $(document).on('click', '#submit-post-btn',function(e){
-          var task_title = $('#task_title').val();
-          var description = $('#task_des').val();
-          
-          var my_data = {
-            "title" : task_title,
-            "description": description,
-            'csrfmiddlewaretoken': "{{ csrf_token }}",
-          }
+      <div class="col-sm">
+        <table class="table table-dark my_table">
 
-          $.ajax({
-          type:'POST',
-          url:'{% url "create" %}',
-          data:my_data,
-        success:function(json){
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Task</th>
+              <th scope="col">Description</th>
+
+            </tr>
+          </thead>
+          <tbody>
+
+            {% for task in task %}
+
+            <tr>
+              <td>{{task.id}}</td>
+              <td>{{task.title}}</td>
+              <td>{{task.description}}</td>
+
+            </tr>
+
+            {% endfor %}
+
+
+          </tbody>
+        </table>
+
+     
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).on('click', '#submit-post-btn', function (e) {
+      var task_title = $('#task_title').val();
+      var description = $('#task_des').val();
+
+      var my_data = {
+        "title": task_title,
+        "description": description,
+        'csrfmiddlewaretoken': "{{ csrf_token }}",
+      }
+
+      $.ajax({
+        type: 'POST',
+        url: '{% url "create" %}',
+        data: my_data,
+        success: function (json) {
           console.log(json),
-          $('.my_table').append('<tr>'+'<td>'+json.id+'</td>'+'<td>'+json.title+'</td>'+'<td>'+json.description+'</td>'+'</tr>')
-          },
+            $('.my_table').append('<tr>' + '<td>' + json.id + '</td>' + '<td>' + json.title + '</td>' + '<td>' + json.description + '</td>' + '</tr>')
+        },
       });
-});
-      </script>
+    });
+  </script>
 
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+
+
+</body>
+
 </html>
