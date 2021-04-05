@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product
+from .models import Product,ProductImages
 
 
 # CATEGORY=(
@@ -14,7 +14,10 @@ from .models import Product
 class ProductCreateForm(forms.ModelForm):
 
     class Meta:
-
         model=Product
-
         fields= ('name','description','category','price',)
+        
+class ProductImageFrom(forms.ModelForm):
+    class Meta:
+        model=ProductImages
+        fields=('image',)

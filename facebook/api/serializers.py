@@ -18,7 +18,7 @@ class UserSerializerforaccess(serializers.ModelSerializer):
         fields=['username']
 # account serializers
 class UserProfileSerializer(serializers.ModelSerializer):
-    # user=serializers.ReadOnlyField(source='user.username')
+    user=UserSerializer('user.username')
     friends=UserSerializer(many=True, read_only=True)
 
     class Meta:
