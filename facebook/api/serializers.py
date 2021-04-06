@@ -4,6 +4,9 @@ from account.models import UserProfile,FriendRequest
 from postapp.models import Post,Comment
 
 
+
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -16,9 +19,10 @@ class UserSerializerforaccess(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=['username']
+        
 # account serializers
 class UserProfileSerializer(serializers.ModelSerializer):
-    user=UserSerializer('user.username')
+    # user=UserSerializerforaccess()
     friends=UserSerializer(many=True, read_only=True)
 
     class Meta:

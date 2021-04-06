@@ -100,8 +100,7 @@ class CommentCreate(generics.CreateAPIView):
 
 @api_view(['GET'])
 def api_root(request,format=None):
-
-    return Response({'users_profile_list': reverse('user_profile_list', request=request, format=format),
+    urlslink={'users_profile_list': reverse('user_profile_list', request=request, format=format),
                      'users_profile_create': reverse('user_profile_create', request=request, format=format),
                      'users_create': reverse('user_create', request=request, format=format),
                      'users_list': reverse('user_list', request=request, format=format),
@@ -112,13 +111,13 @@ def api_root(request,format=None):
 
                     #  'friend_detail': reverse('/friend-detail/', request=request, format=format),
 
-
-
                      'posts_list': reverse('post_list', request=request, format=format),
                      'posts_create': reverse('posts_create', request=request, format=format),
 
 
-    })
+    }
+
+    return Response(urlslink)
     # 'posts_list': reverse('post-list', request=request, format=format),
     # 'f_request_list': reverse('f-request-list', request=request, format=format),
     # 'comment_list': reverse('comment-list', request=request, format=format),

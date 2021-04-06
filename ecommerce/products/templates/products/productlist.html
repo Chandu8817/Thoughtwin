@@ -27,10 +27,13 @@
             </div>
 
           </div>
+          
             {% with product_image=product.product_images.first %}
+              <img src="{{ product_image.image.url }}" alt="Generic placeholder image" width="200"
+              class="ml-lg-5 order-1 order-lg-2 productlist-img">
+          
+             
             
-            <img src="{{ product_image.image.url }}" alt="Generic placeholder image" width="200"
-            class="ml-lg-5 order-1 order-lg-2">
          
 
            {% endwith %}

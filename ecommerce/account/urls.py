@@ -1,0 +1,17 @@
+from django.urls import path
+from django.contrib.auth.decorators import login_required
+
+# from . import views
+from account.views import (UserSignUpView, UserLoginView, UserLogoutView,
+                           ProfileView,  UpdateProfilePhoto,UpdateCoverPhoto)
+
+urlpatterns = [
+
+    path('', UserLoginView.as_view(), name='home'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('signup/', UserSignUpView.as_view(), name='signup'),
+    path('logout', UserLogoutView.as_view(), name='logout'),
+    path('update/', UpdateProfilePhoto.as_view(), name='update'),
+    path('updatecover/', UpdateCoverPhoto.as_view(), name='updatecover'),
+
+]
