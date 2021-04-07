@@ -3,6 +3,7 @@ from django.urls import path,include
 from rest_framework import renderers
 # from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
+from  rest_framework.authtoken.views import  obtain_auth_token
 
 from api import views
 
@@ -36,8 +37,10 @@ urlpatterns = [
 
     path('post-list/', views.PostList.as_view(),name='post_list'),
     path('post-create/', views.PostCreate.as_view(),name='posts_create'),
+    path('post-delete/<str:pk>/', views.PostDelete.as_view(), name='posts_delete'),
     path('comment-list/', views.CommentList.as_view(),name='comment_list'),
     path('comment-create/', views.CommentCreate.as_view(),name='comment_create'),
+    path('api-token-auth/',obtain_auth_token,name='api_token_auth')
 
 
 

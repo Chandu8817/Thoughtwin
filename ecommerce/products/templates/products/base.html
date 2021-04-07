@@ -3,114 +3,154 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
-  <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/nav.css' %}">
 
 
-  <title>Ecommerce site</title>
+    <title>Ecommerce site</title>
 </head>
 
 
 <body>
-  <nav class="navbar">
+<nav class="navbar">
     <i class="material-icons menu-icon">
-      menu
+        menu
     </i>
     <div class="logo">
-      <img src="https://github.com/subeshb1/GrabCheap/blob/master/img/logo_inverse.jpg?raw=true" alt="logo">
-      <div class="text"> GrabCheap
-      </div>
+        <img src="https://github.com/subeshb1/GrabCheap/blob/master/img/logo_inverse.jpg?raw=true" alt="logo">
+        <div class="text"> RishiBaba ki dukan
+        </div>
     </div>
     <div class="item search right" tabindex="0">
-      <div class="search-group" >
-        <select id="category-id">
-            <option value="">all</option>
-            {% for category in categories %}
-          <option  value="{{category.name}}">{{category}}</option>
-           {% endfor %}
-        </select>
-        <input type="text" placeholder="Search Prdoucts" name="search_name" id="search-box" required >
-        <i class="material-icons search-icon">
-          search
-        </i>
-      </div>
+        <div class="search-group">
+            <select id="category-id">
+                <option value="">all</option>
+                {% for category in categories %}
+                    <option value="{{ category.name }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" placeholder="Search Prdoucts" name="search_name" id="search-box" required>
+            <i class="material-icons search-icon">
+                search
+            </i>
+        </div>
     </div>
 
-<div class="box stack-top" id="suggesstion-box">
+    <div class="box stack-top" id="suggesstion-box">
 
-</div>
+    </div>
 
     <a href="" class="  item">
 
-      <div class="group">
-        <i class="material-icons">
-          account_circle
-        </i>
-        <div class="detail">
-          Account
-          <div class="sub">Sign In</div>
+        <div class="group">
+            <i class="material-icons">
+                account_circle
+            </i>
+            <div class="detail">
+                Account
+                <div class="sub">Sign In</div>
+            </div>
         </div>
-      </div>
     </a>
 
     <a href="" class="item">
-      <div class="group">
-        <i class="material-icons">
-          shopping_cart
-        </i>
-        <div class="detail">
-          Cart
-          <div class="sub">Rs 0.0</div>
+        <div class="group">
+            <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">
+                        shopping_cart
+                    </i>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
+                    <div class="dropdown-item detail">
+                        Cart
+
+                    </div>
+                    <div class="dropdown-item detail" id="cart-detail">
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
         </div>
-      </div>
     </a>
-  </nav>
-  <br>
-  <div class="container">
+</nav>
+<br>
+<div class="container">
     {% block content %}
 
     {% endblock %}
-  </div>
+</div>
 
 
+<!-- end Single product -->
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
 
-
-
-  <!-- end Single product -->
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
-
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script>
+<script>
     $(document).ready(function () {
-      $("#search-box").keyup(function () {
-          var selectedText = $("#category-id").find("option:selected").val();
-        var mydata = {
-          search: $(this).val(),
-        category: selectedText
-        };
-        $.ajax({
-          type: "GET",
-          url: "{% url 'search_products' %}",
-          data: mydata,
-          success: function (data) {
-              $("#suggesstion-box").html(data);
-          },
+        $("#search-box").keyup(function () {
+            var selectedText = $("#category-id").find("option:selected").val();
+            var mydata = {
+                search: $(this).val(),
+                category: selectedText
+            };
+            $.ajax({
+                type: "GET",
+                url: "{% url 'search_products' %}",
+                data: mydata,
+                success: function (data) {
+                    $("#suggesstion-box").html(data);
+                },
+            });
         });
-      });
     });
-  </script>
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#add-to-cart").click(function () {
+
+            var mydata = {
+                add_product: $('#add-product').val(),
+                'csrfmiddlewaretoken': "{{ csrf_token }}",
+            };
+            $.ajax({
+                type: "GET",
+                url: "{% url 'add_to_cart' %}",
+                data: mydata,
+                success: function (data) {
+                    $("#cart-detail").html(data);
+                },
+            });
+        });
+    });
+</script>
 </body>
 
 </html>
