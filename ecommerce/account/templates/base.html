@@ -13,25 +13,26 @@
       integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
        crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style2.css' %}">
+      <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/signup1.css' %}">
     <title>Hello, world!</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+
 
     <div id="header">
         <!-- // header content -->
-    
+
     </div>
     
-    <div id="main_content">
-        {% block content %}
+
+        {% block accountcontent %}
         {% endblock %}       // This is where our page-specific code goes. 
-    </div>
+
     
-    <div id="footer">
-        <!-- // footer content -->
-    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

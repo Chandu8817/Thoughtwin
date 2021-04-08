@@ -16,34 +16,34 @@ gender_choices = (
 class ExtendedUser(UserCreationForm):
 
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': 'Username',
         'id': 'username_id'}))
 
     first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': 'First name',
         'id': 'username_id'}))
 
     last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': 'Last name',
         'id': 'username_id'}))
 
     email = forms.EmailField(widget=forms.EmailInput(attrs={
 
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': 'Email',
         'id': 'username_id'}))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
 
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': 'Password',
         'id': 'username_id'}))
 
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
 
-        'class': 'inputbody in2',
+        'class': 'form-control',
         'placeholder': ' Confirm Password',
         'id': 'username_id'}))
 
@@ -63,15 +63,15 @@ class ExtendedUser(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     dob = forms.DateField(widget=forms.DateInput(
         attrs={
-            'class': 'inputbody in2',
+            'class': 'form-control',
             'placeholder': 'date of birth',
             'id': 'username_id'}))
     gender = forms.ChoiceField(choices=gender_choices, widget=forms.Select(
         attrs={
-            'class': 'inputbody in2',
+            'class': 'form-control',
             'id': 'username_id'}))
 
-    # profile_pic=forms.ImageField(required=False)
+    profile_pic=forms.ImageField(required=False)
 
     class Meta:
         model = UserProfile
@@ -84,12 +84,12 @@ class UserLoginForm(AuthenticationForm):
 
     username = forms.CharField(widget=forms.TextInput(
         attrs={
-            'class': 'inputtext',
+            'class': 'form-control',
             'placeholder': 'Username',
             'id': 'username_id'}))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={
-            'class': 'inputtext',
+            'class': 'form-control',
             'placeholder': 'Password',
             'id': 'password_id',
         }

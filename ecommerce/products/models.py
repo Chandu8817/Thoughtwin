@@ -45,4 +45,4 @@ class ProductImages(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cart_item = models.ManyToManyField(Product, related_name='cart_item',blank=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,blank=True,null=True)

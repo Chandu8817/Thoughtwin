@@ -48,44 +48,55 @@
 
     </div>
 
-    <a href="" class="  item">
 
-        <div class="group">
-            <i class="material-icons">
-                account_circle
-            </i>
-            <div class="detail">
-                Account
-                <div class="sub">Sign In</div>
+
+    <a href="" class="item">
+        <!-- Default dropleft button -->
+        <div class="btn-group dropleft">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                <i class="material-icons">
+                    shopping_cart
+                </i>
+
+            </button>
+            <div class="dropdown-menu">
+                <!-- Dropdown menu links -->
+                        {% for item in cart_item %}
+                    <div class="dropdown-item detail">
+                        {{ item.product }}
+                    </div>
+                {% endfor %}
+
             </div>
         </div>
     </a>
+<a href="" class="  item">
+    <div></div>
+    <a/>
+ <a href="" class="  item">
 
-    <a href="" class="item">
-        <div class="group">
-            <div class="dropdown show">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="material-icons">
-                        shopping_cart
-                    </i>
-                </a>
-
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-
-                    <div class="dropdown-item detail">
-                        Cart
-
-                    </div>
-                    <div class="dropdown-item detail" id="cart-detail">
+        <div class="group  bg-success">
+            {% if user %}
+                 <i >
+                     {{ user.userprofiles.profile_pic }}
+            </i>
 
 
-                    </div>
-
-                </div>
+            <div class="detail">
+                {{ user.username }}
+                <div class="sub"><a href="{% url 'signup' %}">Logout</a></div>
+            </div>
+                {% else %}
+                  <i class="material-icons">
+                account_circle
+            </i>
+                 <div class="detail">
+                Account
+                <div class="sub">Sign In</div>
             </div>
 
-
+            {% endif %}
         </div>
     </a>
 </nav>
