@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from django.contrib import messages
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'products.apps.ProductsConfig',
     'account.apps.AccountConfig',
+    'sellers.apps.SellersConfig',
 
 ]
 
@@ -58,7 +61,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,9 +106,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# f = open("pas.txt", "r")
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+MAILER_EMAIL_BACKEND = EMAIL_BACKEND
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chandrashekhar.thoughtwin@gmail.com'
+EMAIL_HOST_PASSWORD = 'guddu8969'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -127,3 +148,6 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51ImWnySAF2GIiT99sJFhuKh0FIxgA3ZsmgzuaTr9KQ49eajJfuj5WTyaM0AQFiuuGxoVmK3JkUOJoGD1GW1nYUHl00UBpxOnIN'
+STRIPE_SECRET_KEY = 'sk_test_51ImWnySAF2GIiT99gaY9l33N1gINm1xKVmsIpECk4xGWBDc4pExKjmPmL6xHzKVXWyeYznDuBascdGeNRoC7lnZQ00nHL4Hbz3'

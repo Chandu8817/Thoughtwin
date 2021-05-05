@@ -14,8 +14,7 @@ class UserProfile(models.Model):
     gender = models.CharField(max_length=10, choices=gender_choices)
     profile_pic = models.ImageField(upload_to="images/profile"
                                     , default="images/profile/profile-default.png")
-    profile_cover = models.ImageField(upload_to="images/coverimage"
-                                      , default="images/coverimage/cover-def.png")
+
 
     def __str__(self):
         return self.user.username
